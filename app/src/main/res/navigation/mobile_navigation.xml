@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_dashboard">
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="me.ssttkkl.mrmemorizer.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_note_list"
+        android:name="me.ssttkkl.mrmemorizer.ui.notelist.NoteListFragment"
+        android:label="@string/title_note_list"
+        tools:layout="@layout/fragment_note_list">
+        <action
+            android:id="@+id/action_navigation_note_list_to_navigation_view_note"
+            app:destination="@id/navigation_view_note" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_statistics"
+        android:name="me.ssttkkl.mrmemorizer.ui.statistics.StatisticsFragment"
+        android:label="@string/title_statistics"
+        tools:layout="@layout/fragment_statistics" />
+
+    <fragment
+        android:id="@+id/navigation_view_note"
+        android:name="me.ssttkkl.mrmemorizer.ui.viewnote.ViewNoteFragment"
+        android:label="@string/title_view_note"
+        tools:layout="@layout/fragment_view_note">
+        <argument
+            android:name="noteId"
+            app:argType="java.lang.Integer" />
+        <action
+            android:id="@+id/action_navigation_view_note_to_navigation_edit_note"
+            app:destination="@id/navigation_edit_note" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_edit_note"
+        android:name="me.ssttkkl.mrmemorizer.ui.editnote.EditNoteFragment"
+        android:label="@string/title_edit_note"
+        tools:layout="@layout/fragment_edit_note">
+        <argument
+            android:name="note"
+            app:argType="me.ssttkkl.mrmemorizer.data.entity.Note" />
+    </fragment>
+</navigation>

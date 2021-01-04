@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Mr.MEMORIZER</string>
+    <string name="title_dashboard">开始</string>
+    <string name="title_note_list">笔记一览</string>
+    <string name="new_note">新建笔记</string>
+    <string name="edit_note">编辑笔记</string>
+    <string name="title_statistics">数据统计</string>
+    <string name="title_edit_note">编辑笔记</string>
+    <string name="text_title">标题</string>
+    <string name="title_save">保存</string>
+    <string name="title_abort">放弃</string>
+    <string name="text_content">内容</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_view_note">查看笔记</string>
+    <string name="title_edit">编辑</string>
+    <string name="title_remove">删除</string>
+</resources>
