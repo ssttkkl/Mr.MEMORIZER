@@ -15,29 +15,26 @@ class EditNoteViewModel : ViewModel() {
     enum class Mode { New, Edit }
 
     val mode = MutableLiveData<Mode>()
-
-    var noteBeforeEdit: Note? = null
-        private set
-
+    val originNote = MutableLiveData<Note>()
     val noteTitle = MutableLiveData<String>()
     val noteContent = MutableLiveData<String>()
 
     val finishEvent = SingleLiveEvent<Unit>()
 
-    private var firstCreate = AtomicBoolean(true)
+    private var initialized = AtomicBoolean(false)
 
-    fun startAsNewNote() {
-        if (firstCreate.getAndSet(false)) {
+    fun initializeForNewNote() {
+        if (!initialized.getAndSet(true)) {
             mode.value = Mode.New
             noteTitle.value = ""
             noteContent.value = ""
         }
     }
 
-    fun startAsEditNote(note: Note) {
-        if (firstCreate.getAndSet(false)) {
+    fun initializeForEditNote(note: Note) {
+        if (!initialized.getAndSet(true)) {
             mode.value = Mode.Edit
-            noteBeforeEdit = note
+            originNote.value = note
             noteTitle.value = note.title
             noteContent.value = note.content
             // TODO:
@@ -45,22 +42,30 @@ class EditNoteViewModel : ViewModel() {
     }
 
     fun onClickSave() {
-        val note = when (mode.value!!) {
-            Mode.New -> Note(
-                title = noteTitle.value ?: "",
-                content = noteContent.value ?: ""
-            )
-            Mode.Edit -> Note(
-                noteId = noteBeforeEdit!!.noteId,
-                title = noteTitle.value ?: "",
-                content = noteContent.value ?: "",
-                createTime = noteBeforeEdit!!.createTime,
-                stage = noteBeforeEdit!!.stage,
-                nextNotifyTime = noteBeforeEdit!!.nextNotifyTime
-            )
-        }
-        GlobalScope.launch(Dispatchers.IO) {
-            AppDatabase.getInstance().noteDao.insertNote(note)
+        when (mode.value!!) {
+            Mode.New -> {
+                GlobalScope.launch(Dispatchers.IO) {
+                    val note = Note(
+                        title = noteTitle.value ?: "",
+                        content = noteContent.value ?: ""
+                    )
+                    AppDatabase.getInstance().noteDao.insertNote(note)
+                }
+            }
+            Mode.Edit -> {
+                val origin = originNote.value!!
+                GlobalScope.launch(Dispatchers.IO) {
+                    val note = Note(
+                        noteId = origin.noteId,
+                        title = noteTitle.value ?: "",
+                        content = noteContent.value ?: "",
+                        createTime = origin.createTime,
+                        stage = origin.stage,
+                        nextNotifyTime = origin.nextNotifyTime
+                    )
+                    AppDatabase.getInstance().noteDao.updateNote(note)
+                }
+            }
         }
         finishEvent.call()
     }

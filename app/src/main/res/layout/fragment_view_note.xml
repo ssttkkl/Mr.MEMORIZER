@@ -78,9 +78,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:contentDescription="@string/done_review"
-            android:onClick="@{() -> viewModel.onClickDoneReview()}"
-            android:visibility="@{viewModel.doneReviewButtonVisible ? View.VISIBLE : View.GONE}"
+            android:contentDescription="@string/do_review"
+            android:onClick="@{() -> viewModel.onClickDoReview()}"
+            android:visibility="@{viewModel.doReviewButtonVisible ? View.VISIBLE : View.GONE}"
             app:srcCompat="@drawable/ic_done_black_24dp" />
 
         <com.google.android.material.appbar.AppBarLayout

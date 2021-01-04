@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -31,14 +31,22 @@ class NoteListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        // setHasOptionsMenu(true)
-
         binding.list.apply {
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(CommonRecViewItemDecoration(8, 8, 8))
             adapter = NoteRecyclerViewAdapter(this@NoteListFragment, binding.viewModel!!)
         }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                binding.viewModel?.searchQuery?.value = newText
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+        })
 
         binding.viewModel?.apply {
             showViewNoteViewEvent.observe(this@NoteListFragment, Observer { showViewNoteView(it) })

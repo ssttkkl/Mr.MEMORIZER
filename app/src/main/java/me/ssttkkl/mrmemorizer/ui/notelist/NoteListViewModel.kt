@@ -1,5 +1,7 @@
 package me.ssttkkl.mrmemorizer.ui.notelist
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import me.ssttkkl.mrmemorizer.MyApp
 import me.ssttkkl.mrmemorizer.R
@@ -10,7 +12,13 @@ import java.time.OffsetDateTime
 
 class NoteListViewModel : ViewModel() {
 
-    val notes = AppDatabase.getInstance().noteDao.getAllNotesAsLiveData()
+    val searchQuery = MutableLiveData<String>("")
+    val notes = Transformations.switchMap(searchQuery) {
+        if (it.isNullOrEmpty())
+            AppDatabase.getInstance().noteDao.loadAllNotes()
+        else
+            AppDatabase.getInstance().noteDao.searchNotes(it)
+    }
 
     fun getNextReviewTimeText(note: Note): String {
         val restSecond = note.nextNotifyTime.toEpochSecond() - OffsetDateTime.now().toEpochSecond()

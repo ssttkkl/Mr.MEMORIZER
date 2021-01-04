@@ -19,7 +19,7 @@ class ViewNoteViewModel : ViewModel() {
 
     val noteId = MutableLiveData<Long>()
     val note = Transformations.switchMap(noteId) {
-        AppDatabase.getInstance().noteDao.getNoteByIdAsLiveData(it)
+        AppDatabase.getInstance().noteDao.getNoteById(it)
     }
     val reviewProgressText = Transformations.map(note) {
         MyApp.context.getString(
@@ -51,7 +51,7 @@ class ViewNoteViewModel : ViewModel() {
             }
         }
     }
-    val doneReviewButtonVisible = Transformations.map(note) {
+    val doReviewButtonVisible = Transformations.map(note) {
         if (it.stage == ReviewStage.nextReviewDuration.size)
             false
         else
@@ -69,10 +69,10 @@ class ViewNoteViewModel : ViewModel() {
         }
     }
 
-    fun onClickDoneReview() {
+    fun onClickDoReview() {
         GlobalScope.launch(Dispatchers.IO) {
             val originNote =
-                AppDatabase.getInstance().noteDao.getNoteById(noteId.value!!) ?: return@launch
+                AppDatabase.getInstance().noteDao.getNoteByIdRaw(noteId.value!!) ?: return@launch
             val note = Note(
                 noteId = originNote.noteId,
                 title = originNote.title,
@@ -85,7 +85,7 @@ class ViewNoteViewModel : ViewModel() {
                 else // 这个值已经没用了
                     OffsetDateTime.now()
             )
-            AppDatabase.getInstance().noteDao.insertNote(note)
+            AppDatabase.getInstance().noteDao.updateNote(note)
         }
         finishEvent.call()
     }

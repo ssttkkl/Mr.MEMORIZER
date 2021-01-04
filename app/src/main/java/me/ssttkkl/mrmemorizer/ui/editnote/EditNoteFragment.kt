@@ -23,8 +23,8 @@ class EditNoteFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = ViewModelProvider(this)[EditNoteViewModel::class.java].apply {
             arguments?.getParcelable<Note>("note")?.let {
-                startAsEditNote(it)
-            } ?: startAsNewNote()
+                initializeForEditNote(it)
+            } ?: initializeForNewNote()
         }
         return binding.root
     }
