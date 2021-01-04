@@ -55,7 +55,10 @@ class ViewNoteFragment : Fragment() {
     private fun showEditNoteView() {
         findNavController().navigate(
             R.id.navigation_edit_note,
-            bundleOf("note" to binding.viewModel!!.note.value)
+            bundleOf(
+                "mode" to "edit",
+                "noteId" to binding.viewModel?.noteId?.value!!
+            )
         )
     }
 

@@ -41,7 +41,8 @@ class DashboardFragment : Fragment() {
 
     private fun showNewNoteView() {
         findNavController().navigate(
-            R.id.navigation_edit_note
+            R.id.navigation_edit_note,
+            bundleOf("mode" to "new")
         )
     }
 

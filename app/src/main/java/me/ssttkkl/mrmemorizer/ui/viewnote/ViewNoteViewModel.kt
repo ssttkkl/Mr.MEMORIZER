@@ -3,6 +3,7 @@ package me.ssttkkl.mrmemorizer.ui.viewnote
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.room.withTransaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -19,7 +20,13 @@ class ViewNoteViewModel : ViewModel() {
 
     val noteId = MutableLiveData<Long>()
     val note = Transformations.switchMap(noteId) {
-        AppDatabase.getInstance().noteDao.getNoteById(it)
+        AppDatabase.getInstance().dao.getNoteById(it)
+    }
+    val category = Transformations.switchMap(note) {
+        if (it.categoryId == 0L)
+            null
+        else
+            AppDatabase.getInstance().dao.getCategoryById(it.categoryId)
     }
     val reviewProgressText = Transformations.map(note) {
         MyApp.context.getString(
@@ -72,11 +79,12 @@ class ViewNoteViewModel : ViewModel() {
     fun onClickDoReview() {
         GlobalScope.launch(Dispatchers.IO) {
             val originNote =
-                AppDatabase.getInstance().noteDao.getNoteByIdRaw(noteId.value!!) ?: return@launch
+                AppDatabase.getInstance().dao.getNoteByIdSync(noteId.value!!) ?: return@launch
             val note = Note(
                 noteId = originNote.noteId,
                 title = originNote.title,
                 content = originNote.content,
+                categoryId = originNote.categoryId,
                 createTime = originNote.createTime,
                 stage = originNote.stage + 1,
                 nextNotifyTime = if (originNote.stage + 1 < ReviewStage.nextReviewDuration.size)
@@ -85,7 +93,7 @@ class ViewNoteViewModel : ViewModel() {
                 else // 这个值已经没用了
                     OffsetDateTime.now()
             )
-            AppDatabase.getInstance().noteDao.updateNote(note)
+            AppDatabase.getInstance().dao.updateNote(note)
         }
         finishEvent.call()
     }
@@ -96,7 +104,12 @@ class ViewNoteViewModel : ViewModel() {
 
     fun onClickRemove() {
         GlobalScope.launch(Dispatchers.IO) {
-            AppDatabase.getInstance().noteDao.deleteNote(noteId.value!!)
+            val db = AppDatabase.getInstance()
+            db.withTransaction {
+                val note = db.dao.getNoteByIdSync(noteId.value!!) ?: return@withTransaction
+                db.dao.deleteNote(note.noteId)
+                db.dao.autoDeleteCategory(note.categoryId)
+            }
         }
         finishEvent.call()
     }

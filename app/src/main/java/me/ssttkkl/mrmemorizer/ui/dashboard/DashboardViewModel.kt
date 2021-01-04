@@ -16,7 +16,7 @@ class DashboardViewModel : ViewModel() {
     private val tick = LiveTicker(30 * 1000)
 
     val notesReadyToReview = Transformations.switchMap(tick) {
-        AppDatabase.getInstance().noteDao.getNoteReadyToReview(
+        AppDatabase.getInstance().dao.getNotesReadyToReview(
             ReviewStage.nextReviewDuration.size - 1,
             it
         )
@@ -28,7 +28,7 @@ class DashboardViewModel : ViewModel() {
         it.isNotEmpty()
     }
     val noteNextReview = Transformations.switchMap(tick) {
-        AppDatabase.getInstance().noteDao.getNoteNextReview(
+        AppDatabase.getInstance().dao.getNoteNextReview(
             ReviewStage.nextReviewDuration.size - 1,
             it
         )

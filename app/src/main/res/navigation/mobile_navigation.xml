@@ -53,7 +53,7 @@
         android:label="@string/title_edit_note"
         tools:layout="@layout/fragment_edit_note">
         <argument
-            android:name="note"
-            app:argType="me.ssttkkl.mrmemorizer.data.entity.Note" />
+            android:name="noteId"
+            app:argType="java.lang.Long" />
     </fragment>
 </navigation>

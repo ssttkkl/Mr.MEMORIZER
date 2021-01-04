@@ -27,4 +27,6 @@
     <string name="text_no_note_next_review">已经没有需要复习的笔记了</string>
     <string name="text_no_note_ready_to_review">没有待复习的笔记了</string>
     <string name="do_review">完成复习</string>
+    <string name="text_category">分类</string>
+    <string name="text_uncategorized">未分类</string>
 </resources>

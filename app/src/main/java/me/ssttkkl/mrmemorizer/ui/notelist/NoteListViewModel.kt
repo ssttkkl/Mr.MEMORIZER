@@ -15,9 +15,9 @@ class NoteListViewModel : ViewModel() {
     val searchQuery = MutableLiveData<String>("")
     val notes = Transformations.switchMap(searchQuery) {
         if (it.isNullOrEmpty())
-            AppDatabase.getInstance().noteDao.loadAllNotes()
+            AppDatabase.getInstance().dao.getAllNotes()
         else
-            AppDatabase.getInstance().noteDao.searchNotes(it)
+            AppDatabase.getInstance().dao.getNotesWithKeyword(it)
     }
 
     fun getNextReviewTimeText(note: Note): String {

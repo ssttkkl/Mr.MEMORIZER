@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import me.ssttkkl.mrmemorizer.R
-import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.databinding.FragmentEditNoteBinding
 
 class EditNoteFragment : Fragment() {
@@ -22,9 +21,10 @@ class EditNoteFragment : Fragment() {
         binding = FragmentEditNoteBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = ViewModelProvider(this)[EditNoteViewModel::class.java].apply {
-            arguments?.getParcelable<Note>("note")?.let {
-                initializeForEditNote(it)
-            } ?: initializeForNewNote()
+            when (arguments?.getString("mode")) {
+                "new" -> initializeForNewNote()
+                "edit" -> initializeForEditNote(arguments!!.getLong("noteId"))
+            }
         }
         return binding.root
     }

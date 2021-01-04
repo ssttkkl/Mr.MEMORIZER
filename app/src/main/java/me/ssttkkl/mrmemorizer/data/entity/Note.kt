@@ -16,14 +16,16 @@ data class Note(
     val noteId: Long,
     val title: String,
     val content: String,
+    @ColumnInfo(name = "category_id") val categoryId: Long,
     @ColumnInfo(name = "create_time") val createTime: OffsetDateTime,
     val stage: Int,
     @ColumnInfo(name = "next_notify_time") val nextNotifyTime: OffsetDateTime
 ) : Parcelable {
-    constructor(title: String, content: String) : this(
+    constructor(title: String, content: String, categoryId: Long) : this(
         0,
         title,
         content,
+        categoryId,
         OffsetDateTime.now(),
         0,
         OffsetDateTime.now().plusSeconds(ReviewStage.nextReviewDuration[0])
