@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="学习进度：0/7"
+                    android:text="@{viewModel.reviewProgress.value}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="学习进度：0/7" />
@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="下一次复习：5分钟后"
+                    android:text="@{viewModel.nextReviewTime.value}"
                     app:layout_constraintStart_toEndOf="@id/textView_reviewProgress"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="下一次复习：5分钟后" />
@@ -55,7 +55,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView_nextReviewTime"
+                    app:layout_constraintTop_toBottomOf="@id/textView_reviewProgress"
                     tools:text="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

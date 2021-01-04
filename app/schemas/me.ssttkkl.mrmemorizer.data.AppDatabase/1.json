@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c552d779b4475ab59425b5733ed61240",
+    "identityHash": "6c926416f19d19e7a6ef471d15bb5198",
     "entities": [
       {
         "tableName": "note",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`note_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `create_timestamp` INTEGER NOT NULL, `stage` INTEGER NOT NULL, `next_notify_timestamp` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`note_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `create_time` INTEGER NOT NULL, `stage` INTEGER NOT NULL, `next_notify_time` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "noteId",
@@ -27,8 +27,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "createTimestamp",
-            "columnName": "create_timestamp",
+            "fieldPath": "createTime",
+            "columnName": "create_time",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -39,8 +39,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "nextNotifyTimestamp",
-            "columnName": "next_notify_timestamp",
+            "fieldPath": "nextNotifyTime",
+            "columnName": "next_notify_time",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -58,7 +58,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c552d779b4475ab59425b5733ed61240')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6c926416f19d19e7a6ef471d15bb5198')"
     ]
   }
 }

@@ -6,7 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import me.ssttkkl.mrmemorizer.res.ReviewStage
-import java.util.*
+import java.time.OffsetDateTime
 
 @Parcelize
 @Entity(tableName = "note")
@@ -16,16 +16,16 @@ data class Note(
     val noteId: Long,
     val title: String,
     val content: String,
-    @ColumnInfo(name = "create_timestamp") val createTimestamp: Long,
+    @ColumnInfo(name = "create_time") val createTime: OffsetDateTime,
     val stage: Int,
-    @ColumnInfo(name = "next_notify_timestamp") val nextNotifyTimestamp: Long
+    @ColumnInfo(name = "next_notify_time") val nextNotifyTime: OffsetDateTime
 ) : Parcelable {
     constructor(title: String, content: String) : this(
         0,
         title,
         content,
-        Calendar.getInstance().timeInMillis / 1000,
+        OffsetDateTime.now(),
         0,
-        Calendar.getInstance().timeInMillis / 1000 + ReviewStage.nextReviewDuration[0]
+        OffsetDateTime.now().plusSeconds(ReviewStage.nextReviewDuration[0])
     )
 }

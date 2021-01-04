@@ -15,4 +15,9 @@
     <string name="title_view_note">查看笔记</string>
     <string name="title_edit">编辑</string>
     <string name="title_remove">删除</string>
+    <string name="text_review_progress">学习进度：%d/%d</string>
+    <string name="text_next_review_time_minute">下一次复习：%d分钟后</string>
+    <string name="text_next_review_time_hour">下一次复习：%d小时后</string>
+    <string name="text_next_review_time_day">下一次复习：%d天后</string>
+    <string name="text_next_review_time_out">待复习</string>
 </resources>

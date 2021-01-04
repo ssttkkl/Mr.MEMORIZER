@@ -54,9 +54,9 @@ class EditNoteViewModel : ViewModel() {
                 noteId = noteBeforeEdit!!.noteId,
                 title = noteTitle.value ?: "",
                 content = noteContent.value ?: "",
-                createTimestamp = noteBeforeEdit!!.createTimestamp,
+                createTime = noteBeforeEdit!!.createTime,
                 stage = noteBeforeEdit!!.stage,
-                nextNotifyTimestamp = noteBeforeEdit!!.nextNotifyTimestamp
+                nextNotifyTime = noteBeforeEdit!!.nextNotifyTime
             )
         }
         GlobalScope.launch(Dispatchers.IO) {
