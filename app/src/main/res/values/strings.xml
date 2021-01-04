@@ -10,15 +10,15 @@
     <string name="title_edit">编辑</string>
     <string name="title_remove">删除</string>
     <string name="new_note">新建笔记</string>
-    <string name="edit_note">编辑笔记</string>
     <string name="text_title">标题</string>
     <string name="text_content">内容</string>
     <string name="text_review_progress">学习进度：%d/%d</string>
     <string name="text_next_review_time">下一次复习：</string>
-    <string name="text_next_review_time_minute">%d分钟后</string>
-    <string name="text_next_review_time_hour">%d小时后</string>
-    <string name="text_next_review_time_day">%d天后</string>
-    <string name="text_next_review_time_out">待复习</string>
+    <string name="text_next_review_time_value_at_minute">%d分钟后</string>
+    <string name="text_next_review_time_value_at_hour">%d小时后</string>
+    <string name="text_next_review_time_value_at_day">%d天后</string>
+    <string name="text_next_review_time_value_ready">待复习</string>
+    <string name="text_next_review_time_value_closed">无需复习</string>
 
     <string name="notification_channel_name">复习提醒</string>
     <string name="text_readyToReview">待复习</string>
@@ -26,4 +26,5 @@
     <string name="text_nextReview">下一次复习</string>
     <string name="text_no_note_next_review">已经没有需要复习的笔记了</string>
     <string name="text_no_note_ready_to_review">没有待复习的笔记了</string>
+    <string name="done_review">完成复习</string>
 </resources>

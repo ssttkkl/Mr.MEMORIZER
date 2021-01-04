@@ -10,22 +10,22 @@ import java.time.OffsetDateTime
 
 class NoteListViewModel : ViewModel() {
 
-    val notes = AppDatabase.getInstance().noteDao.getAllNotes()
+    val notes = AppDatabase.getInstance().noteDao.getAllNotesAsLiveData()
 
     fun getNextReviewTimeText(note: Note): String {
         val restSecond = note.nextNotifyTime.toEpochSecond() - OffsetDateTime.now().toEpochSecond()
         return when {
-            restSecond < 0 -> MyApp.context.getString(R.string.text_next_review_time_out)
+            restSecond < 0 -> MyApp.context.getString(R.string.text_next_review_time_value_ready)
             restSecond / 60 in 0 until 60 -> MyApp.context.getString(
-                R.string.text_next_review_time_minute,
+                R.string.text_next_review_time_value_at_minute,
                 restSecond / 60
             )
             restSecond / 3600 in 0 until 24 -> MyApp.context.getString(
-                R.string.text_next_review_time_hour,
+                R.string.text_next_review_time_value_at_hour,
                 restSecond / 3600
             )
             else -> MyApp.context.getString(
-                R.string.text_next_review_time_day,
+                R.string.text_next_review_time_value_at_day,
                 restSecond / 86400
             )
         }

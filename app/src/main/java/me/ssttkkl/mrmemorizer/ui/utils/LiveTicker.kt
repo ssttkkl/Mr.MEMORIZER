@@ -2,7 +2,7 @@ package me.ssttkkl.mrmemorizer.ui.utils
 
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.*
-import java.time.OffsetDateTime
+import java.time.Instant
 
 class LiveTicker(val durationMillis: Long) : LiveData<Long>() {
     lateinit var ticker: Job
@@ -11,7 +11,7 @@ class LiveTicker(val durationMillis: Long) : LiveData<Long>() {
         ticker = GlobalScope.launch {
             while (true) {
                 try {
-                    postValue(OffsetDateTime.now().toInstant().toEpochMilli())
+                    postValue(Instant.now().toEpochMilli())
                     delay(durationMillis)
                 } catch (exc: CancellationException) {
                     throw exc

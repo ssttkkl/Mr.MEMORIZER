@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="me.ssttkkl.mrmemorizer.ui.viewnote.ViewNoteViewModel" />
@@ -76,9 +78,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:contentDescription="@string/new_note"
-            android:onClick="@{() -> viewModel.onClickEdit()}"
-            app:srcCompat="@drawable/ic_edit_black_24dp" />
+            android:contentDescription="@string/done_review"
+            android:onClick="@{() -> viewModel.onClickDoneReview()}"
+            android:visibility="@{viewModel.doneReviewButtonVisible ? View.VISIBLE : View.GONE}"
+            app:srcCompat="@drawable/ic_done_black_24dp" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

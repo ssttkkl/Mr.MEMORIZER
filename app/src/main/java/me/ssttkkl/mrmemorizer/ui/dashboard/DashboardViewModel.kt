@@ -6,6 +6,7 @@ import me.ssttkkl.mrmemorizer.MyApp
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.data.entity.Note
+import me.ssttkkl.mrmemorizer.res.ReviewStage
 import me.ssttkkl.mrmemorizer.ui.utils.LiveTicker
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 import java.time.OffsetDateTime
@@ -15,7 +16,10 @@ class DashboardViewModel : ViewModel() {
     private val tick = LiveTicker(30 * 1000)
 
     val notesReadyToReview = Transformations.switchMap(tick) {
-        AppDatabase.getInstance().noteDao.getNoteNextNotifyTimeBefore(it)
+        AppDatabase.getInstance().noteDao.getNoteReadyToReviewAsLiveData(
+            ReviewStage.nextReviewDuration.size - 1,
+            it
+        )
     }
     val noteReadyToReviewCount = Transformations.map(notesReadyToReview) {
         MyApp.context.getString(R.string.text_item_count, it.size)
@@ -24,7 +28,7 @@ class DashboardViewModel : ViewModel() {
         it.isNotEmpty()
     }
     val noteNextReview = Transformations.switchMap(tick) {
-        AppDatabase.getInstance().noteDao.getFirstNoteNextNotifyTimeAfter(it)
+        AppDatabase.getInstance().noteDao.getNoteNextReviewAsLiveData(it)
     }
     val hasNoteNextReview = Transformations.map(noteNextReview) {
         it != null
@@ -36,17 +40,17 @@ class DashboardViewModel : ViewModel() {
             val restSecond =
                 it.nextNotifyTime.toEpochSecond() - OffsetDateTime.now().toEpochSecond()
             when {
-                restSecond < 0 -> MyApp.context.getString(R.string.text_next_review_time_out)
+                restSecond < 0 -> MyApp.context.getString(R.string.text_next_review_time_value_ready)
                 restSecond / 60 in 0 until 60 -> MyApp.context.getString(
-                    R.string.text_next_review_time_minute,
+                    R.string.text_next_review_time_value_at_minute,
                     restSecond / 60
                 )
                 restSecond / 3600 in 0 until 24 -> MyApp.context.getString(
-                    R.string.text_next_review_time_hour,
+                    R.string.text_next_review_time_value_at_hour,
                     restSecond / 3600
                 )
                 else -> MyApp.context.getString(
-                    R.string.text_next_review_time_day,
+                    R.string.text_next_review_time_value_at_day,
                     restSecond / 86400
                 )
             }

@@ -22,7 +22,7 @@ class ViewNoteFragment : Fragment() {
         binding = FragmentViewNoteBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = ViewModelProvider(this)[ViewNoteViewModel::class.java].apply {
-            start(arguments?.getLong("noteId")!!)
+            initialize(arguments?.getLong("noteId")!!)
         }
         return binding.root
     }
@@ -46,6 +46,7 @@ class ViewNoteFragment : Fragment() {
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_item_remove -> binding.viewModel?.onClickRemove()
+            R.id.menu_item_edit -> binding.viewModel?.onClickEdit()
             else -> return super.onOptionsItemSelected(item)
         }
         return true
