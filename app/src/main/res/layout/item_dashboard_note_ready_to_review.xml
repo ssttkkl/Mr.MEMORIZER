@@ -13,7 +13,7 @@
 
         <variable
             name="viewModel"
-            type="me.ssttkkl.mrmemorizer.ui.notelist.NoteListViewModel" />
+            type="me.ssttkkl.mrmemorizer.ui.dashboard.DashboardViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -39,7 +39,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="@{note.title}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                app:layout_constraintEnd_toStartOf="@+id/textView_nextReviewTimeValue"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="title" />
@@ -59,19 +59,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView_title"
-                tools:text="content" />
-
-            <TextView
-                android:id="@+id/textView_nextReviewTimeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@{viewModel.getNextReviewTimeText(note)}"
-                app:layout_constraintBottom_toBottomOf="@id/textView_title"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/textView_title"
-                tools:text="5分钟后" />
-
+                tools:text="summarysummarysummary" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

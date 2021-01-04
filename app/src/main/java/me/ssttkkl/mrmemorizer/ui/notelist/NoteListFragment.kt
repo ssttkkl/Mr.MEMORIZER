@@ -41,15 +41,8 @@ class NoteListFragment : Fragment() {
         }
 
         binding.viewModel?.apply {
-            showNewNoteViewEvent.observe(this@NoteListFragment, Observer { showNewNoteView() })
             showViewNoteViewEvent.observe(this@NoteListFragment, Observer { showViewNoteView(it) })
         }
-    }
-
-    private fun showNewNoteView() {
-        findNavController().navigate(
-            R.id.navigation_edit_note
-        )
     }
 
     private fun showViewNoteView(note: Note) {

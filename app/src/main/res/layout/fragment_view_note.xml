@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="@{viewModel.reviewProgress.value}"
+                    android:text="@{viewModel.reviewProgressText}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="学习进度：0/7" />
@@ -40,10 +40,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="@{viewModel.nextReviewTime.value}"
+                    android:text="@string/text_next_review_time"
                     app:layout_constraintStart_toEndOf="@id/textView_reviewProgress"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView_nextReviewTimeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@{viewModel.nextReviewTimeText}"
+                    app:layout_constraintStart_toEndOf="@id/textView_nextReviewTime"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="下一次复习：5分钟后" />
+                    tools:text="5分钟后" />
 
                 <TextView
                     android:id="@+id/textView_content"

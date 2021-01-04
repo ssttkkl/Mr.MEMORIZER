@@ -17,14 +17,17 @@ interface NoteDao {
     fun deleteNote(noteId: Long)
 
     @Query("SELECT * FROM note")
-    fun getAllNotes(): List<Note>
-
-    @Query("SELECT * FROM note")
-    fun getAllNotesAsLiveData(): LiveData<List<Note>>
+    fun getAllNotes(): LiveData<List<Note>>
 
     @Query("SELECT * FROM note WHERE note_id = :noteId")
-    fun getNoteById(noteId: Long): Note?
+    fun getNoteById(noteId: Long): LiveData<Note>
 
-    @Query("SELECT * FROM note WHERE note_id = :noteId")
-    fun getNoteByIdAsLiveData(noteId: Long): LiveData<Note>
+    @Query("SELECT COUNT(note_id) FROM note WHERE next_notify_time <= :timestamp")
+    fun countNoteNextNotifyTimeBefore(timestamp: Long): Long
+
+    @Query("SELECT * FROM note WHERE next_notify_time <= :timestamp ORDER BY next_notify_time")
+    fun getNoteNextNotifyTimeBefore(timestamp: Long): LiveData<List<Note>>
+
+    @Query("SELECT * FROM note WHERE next_notify_time > :timestamp ORDER BY next_notify_time LIMIT 1")
+    fun getFirstNoteNextNotifyTimeAfter(timestamp: Long): LiveData<Note>
 }
