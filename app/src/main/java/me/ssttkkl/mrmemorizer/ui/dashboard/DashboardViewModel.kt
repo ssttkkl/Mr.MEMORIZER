@@ -2,6 +2,7 @@ package me.ssttkkl.mrmemorizer.ui.dashboard
 
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.paging.toLiveData
 import me.ssttkkl.mrmemorizer.MyApp
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
@@ -19,7 +20,7 @@ class DashboardViewModel : ViewModel() {
         AppDatabase.getInstance().dao.getNotesReadyToReview(
             ReviewStage.nextReviewDuration.size - 1,
             it
-        )
+        ).toLiveData(pageSize = 50)
     }
     val noteReadyToReviewCount = Transformations.map(notesReadyToReview) {
         MyApp.context.getString(R.string.text_item_count, it.size)

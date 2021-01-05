@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 data class Category(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "category_id")
-    val categoryId: Long,
+    val categoryId: Int,
     val name: String
 ) : Parcelable {
     constructor(name: String) : this(0, name)

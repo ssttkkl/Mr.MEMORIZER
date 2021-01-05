@@ -13,15 +13,15 @@ import java.time.OffsetDateTime
 data class Note(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_id")
-    val noteId: Long,
+    val noteId: Int,
     val title: String,
     val content: String,
-    @ColumnInfo(name = "category_id") val categoryId: Long,
+    @ColumnInfo(name = "category_id") val categoryId: Int,
     @ColumnInfo(name = "create_time") val createTime: OffsetDateTime,
     val stage: Int,
     @ColumnInfo(name = "next_notify_time") val nextNotifyTime: OffsetDateTime
 ) : Parcelable {
-    constructor(title: String, content: String, categoryId: Long) : this(
+    constructor(title: String, content: String, categoryId: Int) : this(
         0,
         title,
         content,

@@ -35,7 +35,7 @@ class EditNoteViewModel : ViewModel() {
         }
     }
 
-    fun initializeForEditNote(noteId: Long) {
+    fun initializeForEditNote(noteId: Int) {
         if (!initialized.getAndSet(true)) {
             mode = Mode.Edit
             GlobalScope.launch(Dispatchers.IO) {
@@ -44,7 +44,7 @@ class EditNoteViewModel : ViewModel() {
 
                 noteTitle.postValue(origin?.title)
                 noteContent.postValue(origin?.content)
-                if (origin?.categoryId != null && origin.categoryId != 0L) {
+                if (origin?.categoryId != null && origin.categoryId != 0) {
                     val category =
                         AppDatabase.getInstance().dao.getCategoryByIdSync(origin.categoryId)
                     noteCategory.postValue(category?.name)
@@ -61,7 +61,7 @@ class EditNoteViewModel : ViewModel() {
                 val categoryId = if (categoryName.isEmpty()) 0 else {
                     var category = db.dao.getCategoryByNameSync(categoryName)
                     if (category == null) {
-                        db.dao.insertCategory(Category(categoryName))
+                        db.dao.insertCategorySync(Category(categoryName))
                         category = db.dao.getCategoryByNameSync(categoryName)
                     }
                     category!!.categoryId
@@ -74,7 +74,7 @@ class EditNoteViewModel : ViewModel() {
                             content = noteContent.value ?: "",
                             categoryId = categoryId
                         )
-                        db.dao.insertNote(note)
+                        db.dao.insertNoteSync(note)
                     }
                     Mode.Edit -> {
                         val origin = originNote!!
@@ -88,7 +88,7 @@ class EditNoteViewModel : ViewModel() {
                                 stage = origin.stage,
                                 nextNotifyTime = origin.nextNotifyTime
                             )
-                            db.dao.updateNote(note)
+                            db.dao.updateNoteSync(note)
                             db.dao.autoDeleteCategory(origin.categoryId)
                         }
                     }

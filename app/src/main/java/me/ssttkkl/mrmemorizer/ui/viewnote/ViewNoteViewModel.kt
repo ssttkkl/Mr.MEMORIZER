@@ -18,12 +18,12 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class ViewNoteViewModel : ViewModel() {
 
-    val noteId = MutableLiveData<Long>()
+    val noteId = MutableLiveData<Int>()
     val note = Transformations.switchMap(noteId) {
         AppDatabase.getInstance().dao.getNoteById(it)
     }
     val category = Transformations.switchMap(note) {
-        if (it.categoryId == 0L)
+        if (it.categoryId == 0)
             null
         else
             AppDatabase.getInstance().dao.getCategoryById(it.categoryId)
@@ -70,7 +70,7 @@ class ViewNoteViewModel : ViewModel() {
 
     private val initialized = AtomicBoolean(false)
 
-    fun initialize(noteId: Long) {
+    fun initialize(noteId: Int) {
         if (!initialized.getAndSet(true)) {
             this.noteId.value = noteId
         }
@@ -93,7 +93,7 @@ class ViewNoteViewModel : ViewModel() {
                 else // 这个值已经没用了
                     OffsetDateTime.now()
             )
-            AppDatabase.getInstance().dao.updateNote(note)
+            AppDatabase.getInstance().dao.updateNoteSync(note)
         }
         finishEvent.call()
     }
@@ -107,7 +107,7 @@ class ViewNoteViewModel : ViewModel() {
             val db = AppDatabase.getInstance()
             db.withTransaction {
                 val note = db.dao.getNoteByIdSync(noteId.value!!) ?: return@withTransaction
-                db.dao.deleteNote(note.noteId)
+                db.dao.deleteNoteSync(note.noteId)
                 db.dao.autoDeleteCategory(note.categoryId)
             }
         }

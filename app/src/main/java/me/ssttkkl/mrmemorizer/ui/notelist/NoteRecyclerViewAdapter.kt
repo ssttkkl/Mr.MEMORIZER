@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.databinding.ItemNoteListBinding
@@ -20,7 +20,7 @@ private val noteItemCallback = object : DiffUtil.ItemCallback<Note>() {
 class NoteRecyclerViewAdapter(
     val lifecycleOwner: LifecycleOwner,
     private val viewModel: NoteListViewModel
-) : ListAdapter<Note, NoteRecyclerViewAdapter.ViewHolder>(noteItemCallback) {
+) : PagedListAdapter<Note, NoteRecyclerViewAdapter.ViewHolder>(noteItemCallback) {
 
     init {
         viewModel.notes.observe(lifecycleOwner, Observer {
@@ -45,7 +45,7 @@ class NoteRecyclerViewAdapter(
             binding.viewModel = viewModel
         }
 
-        fun bind(note: Note) {
+        fun bind(note: Note?) {
             binding.note = note
             binding.executePendingBindings()
         }

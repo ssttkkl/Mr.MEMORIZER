@@ -24,7 +24,7 @@ class EditNoteFragment : Fragment() {
         binding.viewModel = ViewModelProvider(this)[EditNoteViewModel::class.java].apply {
             when (requireArguments().getString("mode")) {
                 "new" -> initializeForNewNote()
-                "edit" -> initializeForEditNote(requireArguments().getLong("noteId"))
+                "edit" -> initializeForEditNote(requireArguments().getInt("noteId"))
             }
         }
         return binding.root

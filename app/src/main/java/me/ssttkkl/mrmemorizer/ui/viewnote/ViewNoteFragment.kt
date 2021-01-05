@@ -22,7 +22,7 @@ class ViewNoteFragment : Fragment() {
         binding = FragmentViewNoteBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = ViewModelProvider(this)[ViewNoteViewModel::class.java].apply {
-            initialize(arguments?.getLong("noteId")!!)
+            initialize(requireArguments().getInt("noteId"))
         }
         return binding.root
     }
