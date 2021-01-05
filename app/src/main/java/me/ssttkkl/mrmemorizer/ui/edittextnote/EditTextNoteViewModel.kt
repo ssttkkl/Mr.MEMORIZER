@@ -1,4 +1,4 @@
-package me.ssttkkl.mrmemorizer.ui.editnote
+package me.ssttkkl.mrmemorizer.ui.edittextnote
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,10 +9,11 @@ import kotlinx.coroutines.launch
 import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.data.entity.Category
 import me.ssttkkl.mrmemorizer.data.entity.Note
+import me.ssttkkl.mrmemorizer.data.entity.NoteType
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 import java.util.concurrent.atomic.AtomicBoolean
 
-class EditNoteViewModel : ViewModel() {
+class EditTextNoteViewModel : ViewModel() {
 
     enum class Mode { New, Edit }
 
@@ -23,7 +24,7 @@ class EditNoteViewModel : ViewModel() {
     val noteCategory = MutableLiveData<String>("")
     val noteContent = MutableLiveData<String>("")
 
-    val categories = AppDatabase.getInstance().dao.getAllCategories()
+    val allCategories = AppDatabase.getInstance().categoryDao.getAllCategories()
 
     val finishEvent = SingleLiveEvent<Unit>()
 
@@ -38,15 +39,19 @@ class EditNoteViewModel : ViewModel() {
     fun initializeForEditNote(noteId: Int) {
         if (!initialized.getAndSet(true)) {
             mode = Mode.Edit
-            GlobalScope.launch(Dispatchers.IO) {
-                val origin = AppDatabase.getInstance().dao.getNoteByIdSync(noteId)
-                originNote = origin
 
-                noteTitle.postValue(origin?.title)
-                noteContent.postValue(origin?.content)
-                if (origin?.categoryId != null && origin.categoryId != 0) {
-                    val category =
-                        AppDatabase.getInstance().dao.getCategoryByIdSync(origin.categoryId)
+            GlobalScope.launch(Dispatchers.IO) {
+                val db = AppDatabase.getInstance()
+                val origin = db.noteDao.getNoteByIdSync(noteId)
+                if (origin?.noteType != NoteType.Text) {
+                    error("${origin.toString()} is not a text note.")
+                }
+
+                originNote = origin
+                noteTitle.postValue(origin.title)
+                noteContent.postValue(origin.content)
+                if (origin.categoryId != 0) {
+                    val category = db.categoryDao.getCategoryByIdSync(origin.categoryId)
                     noteCategory.postValue(category?.name)
                 }
             }
@@ -59,10 +64,10 @@ class EditNoteViewModel : ViewModel() {
             db.withTransaction {
                 val categoryName = noteCategory.value ?: ""
                 val categoryId = if (categoryName.isEmpty()) 0 else {
-                    var category = db.dao.getCategoryByNameSync(categoryName)
+                    var category = db.categoryDao.getCategoryByNameSync(categoryName)
                     if (category == null) {
-                        db.dao.insertCategorySync(Category(categoryName))
-                        category = db.dao.getCategoryByNameSync(categoryName)
+                        db.categoryDao.insertCategorySync(Category(categoryName))
+                        category = db.categoryDao.getCategoryByNameSync(categoryName)
                     }
                     category!!.categoryId
                 }
@@ -70,16 +75,18 @@ class EditNoteViewModel : ViewModel() {
                 when (mode) {
                     Mode.New -> {
                         val note = Note(
+                            noteType = NoteType.Text,
                             title = noteTitle.value ?: "",
                             content = noteContent.value ?: "",
                             categoryId = categoryId
                         )
-                        db.dao.insertNoteSync(note)
+                        db.noteDao.insertNoteSync(note)
                     }
                     Mode.Edit -> {
                         val origin = originNote!!
                         GlobalScope.launch(Dispatchers.IO) {
                             val note = Note(
+                                noteType = NoteType.Text,
                                 noteId = origin.noteId,
                                 title = noteTitle.value ?: "",
                                 content = noteContent.value ?: "",
@@ -88,8 +95,8 @@ class EditNoteViewModel : ViewModel() {
                                 stage = origin.stage,
                                 nextNotifyTime = origin.nextNotifyTime
                             )
-                            db.dao.updateNoteSync(note)
-                            db.dao.autoDeleteCategory(origin.categoryId)
+                            db.noteDao.updateNoteSync(note)
+                            db.categoryDao.autoDeleteCategorySync(origin.categoryId)
                         }
                     }
                 }

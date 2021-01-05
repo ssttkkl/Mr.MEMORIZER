@@ -1,4 +1,4 @@
-package me.ssttkkl.mrmemorizer.ui.editnote
+package me.ssttkkl.mrmemorizer.ui.edittextnote
 
 import android.os.Bundle
 import android.view.*
@@ -9,19 +9,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import me.ssttkkl.mrmemorizer.R
-import me.ssttkkl.mrmemorizer.databinding.FragmentEditNoteBinding
+import me.ssttkkl.mrmemorizer.databinding.FragmentEditTextNoteBinding
 
-class EditNoteFragment : Fragment() {
+class EditTextNoteFragment : Fragment() {
 
-    private lateinit var binding: FragmentEditNoteBinding
+    private lateinit var binding: FragmentEditTextNoteBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentEditNoteBinding.inflate(inflater, container, false)
+        binding = FragmentEditTextNoteBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = ViewModelProvider(this)[EditNoteViewModel::class.java].apply {
+        binding.viewModel = ViewModelProvider(this)[EditTextNoteViewModel::class.java].apply {
             when (requireArguments().getString("mode")) {
                 "new" -> initializeForNewNote()
                 "edit" -> initializeForEditNote(requireArguments().getInt("noteId"))
@@ -46,14 +46,14 @@ class EditNoteFragment : Fragment() {
         binding.editTextCategory.setAdapter(categoryAdapter.value)
 
         binding.viewModel?.apply {
-            categories.observe(this@EditNoteFragment, Observer {
+            allCategories.observe(viewLifecycleOwner, Observer {
                 categoryAdapter.value.apply {
                     clear()
                     addAll(it.map { it.name })
                     notifyDataSetChanged()
                 }
             })
-            finishEvent.observe(this@EditNoteFragment, Observer { finish() })
+            finishEvent.observe(viewLifecycleOwner, Observer { finish() })
         }
     }
 

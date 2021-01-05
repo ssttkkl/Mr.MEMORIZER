@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.editnote.EditNoteFragment">
+    tools:context=".ui.edittextnote.EditTextNoteFragment">
 
     <data>
 
         <variable
             name="viewModel"
-            type="me.ssttkkl.mrmemorizer.ui.editnote.EditNoteViewModel" />
+            type="me.ssttkkl.mrmemorizer.ui.edittextnote.EditTextNoteViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

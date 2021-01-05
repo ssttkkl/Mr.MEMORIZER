@@ -1,4 +1,4 @@
-package me.ssttkkl.mrmemorizer.data
+package me.ssttkkl.mrmemorizer.data.converter
 
 import androidx.room.TypeConverter
 import java.time.Instant

@@ -14,6 +14,7 @@ data class Note(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_id")
     val noteId: Int,
+    @ColumnInfo(name = "note_type") val noteType: NoteType,
     val title: String,
     val content: String,
     @ColumnInfo(name = "category_id") val categoryId: Int,
@@ -21,8 +22,9 @@ data class Note(
     val stage: Int,
     @ColumnInfo(name = "next_notify_time") val nextNotifyTime: OffsetDateTime
 ) : Parcelable {
-    constructor(title: String, content: String, categoryId: Int) : this(
+    constructor(noteType: NoteType, title: String, content: String, categoryId: Int) : this(
         0,
+        noteType,
         title,
         content,
         categoryId,

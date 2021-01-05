@@ -49,9 +49,9 @@
 
     <fragment
         android:id="@+id/navigation_edit_note"
-        android:name="me.ssttkkl.mrmemorizer.ui.editnote.EditNoteFragment"
+        android:name="me.ssttkkl.mrmemorizer.ui.edittextnote.EditTextNoteFragment"
         android:label="@string/title_edit_note"
-        tools:layout="@layout/fragment_edit_note">
+        tools:layout="@layout/fragment_edit_text_note">
         <argument
             android:name="noteId"
             app:argType="java.lang.Long" />

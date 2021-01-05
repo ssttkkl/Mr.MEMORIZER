@@ -15,7 +15,7 @@ class NoteListViewModel : ViewModel() {
 
     private val theAllCategory = Category(0, MyApp.context.getString(R.string.text_all_category))
 
-    val allCategories = AppDatabase.getInstance().dao.getAllCategories().map {
+    val allCategories = AppDatabase.getInstance().categoryDao.getAllCategories().map {
         listOf(theAllCategory) + it
     }
 
@@ -26,7 +26,7 @@ class NoteListViewModel : ViewModel() {
         addSource(searchQuery) { value = Pair(it, categoryFilter.value ?: theAllCategory) }
         addSource(categoryFilter) { value = Pair(searchQuery.value ?: "", it) }
     }.switchMap {
-        AppDatabase.getInstance().dao
+        AppDatabase.getInstance().noteDao
             .loadNotes(it.first, it.second.categoryId)
             .toLiveData(pageSize = 50)
     }
@@ -50,7 +50,6 @@ class NoteListViewModel : ViewModel() {
             )
         }
     }
-
 
     val showViewNoteViewEvent = SingleLiveEvent<Note>()
 

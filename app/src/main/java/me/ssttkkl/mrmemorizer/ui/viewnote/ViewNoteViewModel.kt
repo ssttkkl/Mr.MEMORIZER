@@ -20,13 +20,13 @@ class ViewNoteViewModel : ViewModel() {
 
     val noteId = MutableLiveData<Int>()
     val note = Transformations.switchMap(noteId) {
-        AppDatabase.getInstance().dao.getNoteById(it)
+        AppDatabase.getInstance().noteDao.getNoteById(it)
     }
     val category = Transformations.switchMap(note) {
         if (it.categoryId == 0)
             null
         else
-            AppDatabase.getInstance().dao.getCategoryById(it.categoryId)
+            AppDatabase.getInstance().categoryDao.getCategoryById(it.categoryId)
     }
     val reviewProgressText = Transformations.map(note) {
         MyApp.context.getString(
@@ -79,8 +79,9 @@ class ViewNoteViewModel : ViewModel() {
     fun onClickDoReview() {
         GlobalScope.launch(Dispatchers.IO) {
             val originNote =
-                AppDatabase.getInstance().dao.getNoteByIdSync(noteId.value!!) ?: return@launch
+                AppDatabase.getInstance().noteDao.getNoteByIdSync(noteId.value!!) ?: return@launch
             val note = Note(
+                noteType = originNote.noteType,
                 noteId = originNote.noteId,
                 title = originNote.title,
                 content = originNote.content,
@@ -93,7 +94,7 @@ class ViewNoteViewModel : ViewModel() {
                 else // 这个值已经没用了
                     OffsetDateTime.now()
             )
-            AppDatabase.getInstance().dao.updateNoteSync(note)
+            AppDatabase.getInstance().noteDao.updateNoteSync(note)
         }
         finishEvent.call()
     }
@@ -106,9 +107,9 @@ class ViewNoteViewModel : ViewModel() {
         GlobalScope.launch(Dispatchers.IO) {
             val db = AppDatabase.getInstance()
             db.withTransaction {
-                val note = db.dao.getNoteByIdSync(noteId.value!!) ?: return@withTransaction
-                db.dao.deleteNoteSync(note.noteId)
-                db.dao.autoDeleteCategory(note.categoryId)
+                val note = db.noteDao.getNoteByIdSync(noteId.value!!) ?: return@withTransaction
+                db.noteDao.deleteNoteSync(note.noteId)
+                db.categoryDao.autoDeleteCategorySync(note.categoryId)
             }
         }
         finishEvent.call()
