@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -29,10 +30,12 @@ class NoteListFragment : Fragment() {
         return binding.root
     }
 
+    private lateinit var categoryAdapter: CategoryAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.list.apply {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            adapter = NoteRecyclerViewAdapter(this@NoteListFragment, binding.viewModel!!)
+            adapter = NoteRecyclerViewAdapter(viewLifecycleOwner, binding.viewModel!!)
         }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -46,8 +49,35 @@ class NoteListFragment : Fragment() {
             }
         })
 
+        binding.spinnerCategory.apply {
+            adapter = CategoryAdapter(requireContext()).also { categoryAdapter = it }
+            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    binding.viewModel?.categoryFilter?.value = categoryAdapter.getItem(position)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    setSelection(0)
+                }
+            }
+        }
+
         binding.viewModel?.apply {
-            showViewNoteViewEvent.observe(this@NoteListFragment, Observer { showViewNoteView(it) })
+            allCategories.observe(viewLifecycleOwner, Observer {
+                categoryAdapter.apply {
+                    clear()
+                    addAll(it)
+                    notifyDataSetChanged()
+                }
+            })
+            showViewNoteViewEvent.observe(viewLifecycleOwner, Observer {
+                showViewNoteView(it)
+            })
         }
     }
 

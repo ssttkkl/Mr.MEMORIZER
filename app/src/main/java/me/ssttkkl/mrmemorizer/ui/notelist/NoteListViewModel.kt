@@ -1,30 +1,38 @@
 package me.ssttkkl.mrmemorizer.ui.notelist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import me.ssttkkl.mrmemorizer.MyApp
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
+import me.ssttkkl.mrmemorizer.data.entity.Category
 import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.ui.utils.LiveTicker
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 
 class NoteListViewModel : ViewModel() {
 
+    private val theAllCategory = Category(0, MyApp.context.getString(R.string.text_all_category))
+
+    val allCategories = AppDatabase.getInstance().dao.getAllCategories().map {
+        listOf(theAllCategory) + it
+    }
+
+    val categoryFilter = MutableLiveData<Category>(theAllCategory)
     val searchQuery = MutableLiveData<String>("")
-    val notes: LiveData<PagedList<Note>> = Transformations.switchMap(searchQuery) {
-        if (it.isNullOrEmpty())
-            AppDatabase.getInstance().dao.getAllNotes().toLiveData(pageSize = 50)
-        else
-            AppDatabase.getInstance().dao.getNotesWithKeyword(it).toLiveData(pageSize = 50)
+
+    val notes: LiveData<PagedList<Note>> = MediatorLiveData<Pair<String, Category>>().apply {
+        addSource(searchQuery) { value = Pair(it, categoryFilter.value ?: theAllCategory) }
+        addSource(categoryFilter) { value = Pair(searchQuery.value ?: "", it) }
+    }.switchMap {
+        AppDatabase.getInstance().dao
+            .loadNotes(it.first, it.second.categoryId)
+            .toLiveData(pageSize = 50)
     }
 
     private val ticker = LiveTicker(30 * 1000)
-    fun getNextReviewTimeText(note: Note): LiveData<String> = Transformations.map(ticker) {
+    fun getNextReviewTimeText(note: Note): LiveData<String> = ticker.map {
         val restSecond = note.nextNotifyTime.toEpochSecond() - it / 1000
         when {
             restSecond < 0 -> MyApp.context.getString(R.string.text_next_review_time_value_ready)
@@ -42,6 +50,7 @@ class NoteListViewModel : ViewModel() {
             )
         }
     }
+
 
     val showViewNoteViewEvent = SingleLiveEvent<Note>()
 

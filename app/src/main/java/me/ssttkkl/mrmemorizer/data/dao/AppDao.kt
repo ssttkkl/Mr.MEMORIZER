@@ -24,6 +24,25 @@ interface AppDao {
     @Query("SELECT * FROM note WHERE title LIKE '%' || :keyword || '%' OR content LIKE '%' || :keyword || '%'")
     fun getNotesWithKeyword(keyword: String): DataSource.Factory<Int, Note>
 
+    @Query("SELECT * FROM note WHERE category_id = :categoryId")
+    fun getNotesWithCategory(categoryId: Int): DataSource.Factory<Int, Note>
+
+    @Query("SELECT * FROM note WHERE category_id = :categoryId AND title LIKE '%' || :keyword || '%' OR content LIKE '%' || :keyword || '%'")
+    fun getNotesWithKeywordAndCategory(
+        keyword: String,
+        categoryId: Int
+    ): DataSource.Factory<Int, Note>
+
+    fun loadNotes(keyword: String, categoryId: Int) = when {
+        keyword.isNotEmpty() && categoryId != 0 -> getNotesWithKeywordAndCategory(
+            keyword,
+            categoryId
+        )
+        keyword.isNotEmpty() -> getNotesWithKeyword(keyword)
+        categoryId != 0 -> getNotesWithCategory(categoryId)
+        else -> getAllNotes()
+    }
+
     @Query("SELECT * FROM note WHERE note_id = :noteId")
     fun getNoteByIdSync(noteId: Int): Note?
 
