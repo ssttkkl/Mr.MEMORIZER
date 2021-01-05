@@ -1,18 +1,20 @@
 package me.ssttkkl.mrmemorizer.ui.notelist
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.tabs.TabLayoutMediator
 import me.ssttkkl.mrmemorizer.R
+import me.ssttkkl.mrmemorizer.TOP_DEST
 import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.databinding.FragmentNoteListBinding
 
@@ -33,21 +35,12 @@ class NoteListFragment : Fragment() {
     private lateinit var categoryAdapter: CategoryAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.list.apply {
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            adapter = NoteRecyclerViewAdapter(viewLifecycleOwner, binding.viewModel!!)
+        setHasOptionsMenu(true)
+
+        binding.toolbar.apply {
+            (activity as? AppCompatActivity)?.setSupportActionBar(this)
+            setupWithNavController(findNavController(), AppBarConfiguration(TOP_DEST))
         }
-
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String?): Boolean {
-                binding.viewModel?.searchQuery?.value = newText
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
-        })
 
         binding.spinnerCategory.apply {
             adapter = CategoryAdapter(requireContext()).also { categoryAdapter = it }
@@ -67,6 +60,12 @@ class NoteListFragment : Fragment() {
             }
         }
 
+        binding.viewPager.adapter = NotePagerAdapter(viewLifecycleOwner, binding.viewModel!!)
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = binding.viewModel?.tabName?.get(position)
+        }.attach()
+
         binding.viewModel?.apply {
             allCategories.observe(viewLifecycleOwner, Observer {
                 categoryAdapter.apply {
@@ -77,6 +76,24 @@ class NoteListFragment : Fragment() {
             })
             showViewNoteViewEvent.observe(viewLifecycleOwner, Observer {
                 showViewNoteView(it)
+            })
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.menu_note_list, menu)
+
+        (menu.findItem(R.id.app_bar_search).actionView as? SearchView)?.apply {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    binding.viewModel?.searchQuery?.value = newText
+                    return true
+                }
+
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
             })
         }
     }

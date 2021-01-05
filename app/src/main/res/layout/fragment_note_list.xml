@@ -13,44 +13,51 @@
             type="me.ssttkkl.mrmemorizer.ui.notelist.NoteListViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <SearchView
-            android:id="@+id/search_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            android:iconifiedByDefault="false"
-            app:layout_constraintEnd_toStartOf="@+id/spinner_category"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <Spinner
-            android:id="@+id/spinner_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
-            android:name="me.ssttkkl.mrmemorizer.NoteListFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_view"
-            tools:listitem="@layout/item_note_list" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFFFF">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/spinner_category"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Spinner
+                    android:id="@+id/spinner_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

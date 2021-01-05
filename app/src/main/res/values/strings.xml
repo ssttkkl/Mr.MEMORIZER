@@ -28,4 +28,8 @@
     <string name="text_category">分类</string>
     <string name="text_uncategorized">未分类</string>
     <string name="text_all_category">所有分类</string>
+    <string name="title_search">搜索</string>
+    <string name="text_all">全部</string>
+    <string name="text_text_note">文本笔记</string>
+    <string name="text_mind_note">思维导图</string>
 </resources>

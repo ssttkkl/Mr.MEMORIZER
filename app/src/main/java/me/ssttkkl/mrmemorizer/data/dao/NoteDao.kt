@@ -78,7 +78,7 @@ interface NoteDao {
         categoryId != 0 ->
             getNotesWithTypeAndCategory(noteType, categoryId)
         else ->
-            getNotes()
+            getNotesWithType(noteType)
     }
 
     @Query("SELECT * FROM note WHERE stage <= :maxStage AND next_notify_time <= :timestamp ORDER BY next_notify_time")

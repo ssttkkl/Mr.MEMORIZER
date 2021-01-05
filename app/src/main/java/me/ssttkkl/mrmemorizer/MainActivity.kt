@@ -6,6 +6,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+val TOP_DEST = setOf(
+    R.id.navigation_dashboard,
+    R.id.navigation_note_list,
+    R.id.navigation_statistics
+)
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

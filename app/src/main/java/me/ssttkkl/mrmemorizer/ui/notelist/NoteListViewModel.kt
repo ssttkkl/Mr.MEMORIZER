@@ -8,6 +8,7 @@ import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.data.entity.Category
 import me.ssttkkl.mrmemorizer.data.entity.Note
+import me.ssttkkl.mrmemorizer.data.entity.NoteType
 import me.ssttkkl.mrmemorizer.ui.utils.LiveTicker
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 
@@ -22,14 +23,33 @@ class NoteListViewModel : ViewModel() {
     val categoryFilter = MutableLiveData<Category>(theAllCategory)
     val searchQuery = MutableLiveData<String>("")
 
-    val notes: LiveData<PagedList<Note>> = MediatorLiveData<Pair<String, Category>>().apply {
+    private val switching = MediatorLiveData<Pair<String, Category>>().apply {
         addSource(searchQuery) { value = Pair(it, categoryFilter.value ?: theAllCategory) }
         addSource(categoryFilter) { value = Pair(searchQuery.value ?: "", it) }
-    }.switchMap {
+    }
+
+    val allTypeNotes: LiveData<PagedList<Note>> = switching.switchMap {
         AppDatabase.getInstance().noteDao
             .loadNotes(it.first, it.second.categoryId)
             .toLiveData(pageSize = 50)
     }
+    val textNotes: LiveData<PagedList<Note>> = switching.switchMap {
+        AppDatabase.getInstance().noteDao
+            .loadNotes(NoteType.Text, it.first, it.second.categoryId)
+            .toLiveData(pageSize = 50)
+    }
+    val mapNotes: LiveData<PagedList<Note>> = switching.switchMap {
+        AppDatabase.getInstance().noteDao
+            .loadNotes(NoteType.Map, it.first, it.second.categoryId)
+            .toLiveData(pageSize = 50)
+    }
+
+    val tabName = listOf(
+        MyApp.context.getString(R.string.text_all),
+        MyApp.context.getString(R.string.text_text_note),
+        MyApp.context.getString(R.string.text_mind_note)
+    )
+    val tabData = listOf(allTypeNotes, textNotes, mapNotes)
 
     private val ticker = LiveTicker(30 * 1000)
     fun getNextReviewTimeText(note: Note): LiveData<String> = ticker.map {

@@ -3,7 +3,9 @@ package me.ssttkkl.mrmemorizer.ui.notelist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -22,11 +24,15 @@ class NoteRecyclerViewAdapter(
     private val viewModel: NoteListViewModel
 ) : PagedListAdapter<Note, NoteRecyclerViewAdapter.ViewHolder>(noteItemCallback) {
 
-    init {
-        viewModel.notes.observe(lifecycleOwner, Observer {
-            submitList(it)
-        })
-    }
+    private val observer = Observer<PagedList<Note>> { submitList(it) }
+
+    var data: LiveData<PagedList<Note>>? = null
+        set(value) {
+            field?.removeObserver(observer)
+            value?.observe(lifecycleOwner, observer)
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = ItemNoteListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
