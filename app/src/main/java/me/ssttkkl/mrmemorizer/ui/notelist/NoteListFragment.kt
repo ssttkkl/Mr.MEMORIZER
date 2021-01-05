@@ -42,6 +42,8 @@ class NoteListFragment : Fragment() {
             setupWithNavController(findNavController(), AppBarConfiguration(TOP_DEST))
         }
 
+        binding.navView.setupWithNavController(findNavController())
+
         binding.spinnerCategory.apply {
             adapter = CategoryAdapter(requireContext()).also { categoryAdapter = it }
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
