@@ -32,4 +32,8 @@
     <string name="text_all">全部</string>
     <string name="text_text_note">文本笔记</string>
     <string name="text_mind_note">思维导图</string>
+
+    <string name="review_notification_channel_name">笔记复习提醒</string>
+    <string name="review_notification_title">笔记复习提醒</string>
+    <string name="review_notification_content">笔记《%s》待复习</string>
 </resources>

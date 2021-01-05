@@ -22,6 +22,12 @@ interface NoteDao {
 
     // 查询Note
 
+    @Query("SELECT * FROM note WHERE note_id = :noteId")
+    fun getNoteByIdSync(noteId: Int): Note?
+
+    @Query("SELECT * FROM note WHERE note_id = :noteId")
+    fun getNoteById(noteId: Int): LiveData<Note>
+
     @Query("SELECT * FROM note")
     fun getNotes(): DataSource.Factory<Int, Note>
 
@@ -81,15 +87,15 @@ interface NoteDao {
             getNotesWithType(noteType)
     }
 
-    @Query("SELECT * FROM note WHERE stage <= :maxStage AND next_notify_time <= :timestamp ORDER BY next_notify_time")
-    fun loadNotesReadyToReview(maxStage: Int, timestamp: Long): DataSource.Factory<Int, Note>
+    // 注意：返回的LiveData只在数据库有变动时更新
+    @Query("SELECT * FROM note WHERE stage <= :maxStage AND next_notify_time <= strftime('%s','now') ORDER BY next_notify_time")
+    fun loadNotesReadyToReview(maxStage: Int): DataSource.Factory<Int, Note>
 
-    @Query("SELECT * FROM note WHERE note_id = :noteId")
-    fun getNoteByIdSync(noteId: Int): Note?
+    // 注意：返回的LiveData只在数据库有变动时更新
+    @Query("SELECT * FROM note WHERE stage <= :maxStage AND next_notify_time > strftime('%s','now') ORDER BY next_notify_time LIMIT 1")
+    fun getNoteNextReview(maxStage: Int): LiveData<Note>
 
-    @Query("SELECT * FROM note WHERE note_id = :noteId")
-    fun getNoteById(noteId: Int): LiveData<Note>
-
-    @Query("SELECT * FROM note WHERE stage <= :maxStage AND next_notify_time > :timestamp ORDER BY next_notify_time LIMIT 1")
-    fun getNoteNextReview(maxStage: Int, timestamp: Long): LiveData<Note>
+    // 注意：返回的LiveData只在数据库有变动时更新
+    @Query("SELECT * FROM note WHERE stage <= :maxStage AND next_notify_time > strftime('%s','now') ORDER BY next_notify_time LIMIT 1")
+    fun getNoteNextReviewSync(maxStage: Int): Note?
 }

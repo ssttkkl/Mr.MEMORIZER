@@ -18,8 +18,7 @@ class DashboardViewModel : ViewModel() {
 
     val notesReadyToReview = Transformations.switchMap(tick) {
         AppDatabase.getInstance().noteDao.loadNotesReadyToReview(
-            ReviewStage.nextReviewDuration.size - 1,
-            it
+            ReviewStage.nextReviewDuration.size - 1
         ).toLiveData(pageSize = 50)
     }
     val noteReadyToReviewCount = Transformations.map(notesReadyToReview) {
@@ -29,10 +28,8 @@ class DashboardViewModel : ViewModel() {
         it.isNotEmpty()
     }
     val noteNextReview = Transformations.switchMap(tick) {
-        AppDatabase.getInstance().noteDao.getNoteNextReview(
-            ReviewStage.nextReviewDuration.size - 1,
-            it
-        )
+        AppDatabase.getInstance().noteDao
+            .getNoteNextReview(ReviewStage.nextReviewDuration.size - 1)
     }
     val hasNoteNextReview = Transformations.map(noteNextReview) {
         it != null

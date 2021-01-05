@@ -6,11 +6,11 @@ import java.time.OffsetDateTime
 
 class OffsetDateTimeConverter {
     @TypeConverter
-    fun dateTimeToTimestamp(dateTime: OffsetDateTime): Long = dateTime.toInstant().toEpochMilli()
+    fun dateTimeToTimestamp(dateTime: OffsetDateTime): Long = dateTime.toEpochSecond()
 
     @TypeConverter
     fun timestampToDatetime(timestamp: Long): OffsetDateTime {
         val offset = OffsetDateTime.now().offset
-        return Instant.ofEpochMilli(timestamp).atOffset(offset)
+        return Instant.ofEpochSecond(timestamp).atOffset(offset)
     }
 }
