@@ -23,6 +23,8 @@ class EditNoteViewModel : ViewModel() {
     val noteCategory = MutableLiveData<String>("")
     val noteContent = MutableLiveData<String>("")
 
+    val categories = AppDatabase.getInstance().dao.getAllCategories()
+
     val finishEvent = SingleLiveEvent<Unit>()
 
     private var initialized = AtomicBoolean(false)
@@ -72,7 +74,7 @@ class EditNoteViewModel : ViewModel() {
                             content = noteContent.value ?: "",
                             categoryId = categoryId
                         )
-                        AppDatabase.getInstance().dao.insertNote(note)
+                        db.dao.insertNote(note)
                     }
                     Mode.Edit -> {
                         val origin = originNote!!
@@ -86,7 +88,8 @@ class EditNoteViewModel : ViewModel() {
                                 stage = origin.stage,
                                 nextNotifyTime = origin.nextNotifyTime
                             )
-                            AppDatabase.getInstance().dao.updateNote(note)
+                            db.dao.updateNote(note)
+                            db.dao.autoDeleteCategory(origin.categoryId)
                         }
                     }
                 }

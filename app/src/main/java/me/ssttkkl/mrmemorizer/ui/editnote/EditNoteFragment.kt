@@ -2,6 +2,7 @@ package me.ssttkkl.mrmemorizer.ui.editnote
 
 import android.os.Bundle
 import android.view.*
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,19 +22,37 @@ class EditNoteFragment : Fragment() {
         binding = FragmentEditNoteBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = ViewModelProvider(this)[EditNoteViewModel::class.java].apply {
-            when (arguments?.getString("mode")) {
+            when (requireArguments().getString("mode")) {
                 "new" -> initializeForNewNote()
-                "edit" -> initializeForEditNote(arguments!!.getLong("noteId"))
+                "edit" -> initializeForEditNote(requireArguments().getLong("noteId"))
             }
         }
         return binding.root
     }
 
+    private val categoryAdapter = lazy {
+        ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            arrayListOf()
+        )
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        setHasOptionsMenu(true)
+        binding.toolbar.let {
+            (activity as AppCompatActivity).setSupportActionBar(it)
+            setHasOptionsMenu(true)
+        }
+        binding.editTextCategory.setAdapter(categoryAdapter.value)
 
         binding.viewModel?.apply {
+            categories.observe(this@EditNoteFragment, Observer {
+                categoryAdapter.value.apply {
+                    clear()
+                    addAll(it.map { it.name })
+                    notifyDataSetChanged()
+                }
+            })
             finishEvent.observe(this@EditNoteFragment, Observer { finish() })
         }
     }
