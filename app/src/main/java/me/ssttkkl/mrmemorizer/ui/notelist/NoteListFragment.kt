@@ -10,11 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.databinding.FragmentNoteListBinding
-import me.ssttkkl.mrmemorizer.ui.utils.CommonRecViewItemDecoration
 
 class NoteListFragment : Fragment() {
 
@@ -32,8 +31,7 @@ class NoteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.list.apply {
-            layoutManager = LinearLayoutManager(context)
-            addItemDecoration(CommonRecViewItemDecoration(8, 8, 8))
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = NoteRecyclerViewAdapter(this@NoteListFragment, binding.viewModel!!)
         }
 

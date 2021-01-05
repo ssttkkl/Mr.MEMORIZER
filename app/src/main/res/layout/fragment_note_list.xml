@@ -32,7 +32,7 @@
             android:name="me.ssttkkl.mrmemorizer.NoteListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"
+            android:layout_marginHorizontal="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/item_note_list" />
 
