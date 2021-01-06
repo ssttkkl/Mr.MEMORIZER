@@ -9,6 +9,7 @@ import me.ssttkkl.mrmemorizer.MyApp
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.data.entity.Note
+import me.ssttkkl.mrmemorizer.data.entity.NoteType
 import me.ssttkkl.mrmemorizer.res.ReviewStage
 import me.ssttkkl.mrmemorizer.ui.utils.LiveTicker
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
@@ -70,9 +71,10 @@ class DashboardViewModel : ViewModel() {
         it.isNotEmpty()
     }
 
-    val showNewNoteViewEvent = SingleLiveEvent<Unit>()
+    val showNewNoteViewEvent = SingleLiveEvent<NoteType>()
     val showViewNoteViewEvent = SingleLiveEvent<Note>()
 
-    fun onClickNewNote() = showNewNoteViewEvent.call()
+    fun onClickNewTextNote() = showNewNoteViewEvent.call(NoteType.Text)
+    fun onClickNewMapNote() = showNewNoteViewEvent.call(NoteType.Map)
     fun onClickNote(note: Note) = showViewNoteViewEvent.call(note)
 }

@@ -9,7 +9,8 @@
     <string name="title_view_note">查看笔记</string>
     <string name="title_edit">编辑</string>
     <string name="title_remove">删除</string>
-    <string name="new_note">新建笔记</string>
+    <string name="title_new_text_note">新建文本笔记</string>
+    <string name="title_new_map_note">新建思维导图</string>
     <string name="text_title">标题</string>
     <string name="text_content">内容</string>
     <string name="text_review_progress">学习进度：%d/%d</string>

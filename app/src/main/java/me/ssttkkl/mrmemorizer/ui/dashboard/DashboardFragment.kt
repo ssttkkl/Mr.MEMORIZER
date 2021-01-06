@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.entity.Note
+import me.ssttkkl.mrmemorizer.data.entity.NoteType
 import me.ssttkkl.mrmemorizer.databinding.FragmentDashboardBinding
 
 class DashboardFragment : Fragment() {
@@ -34,15 +35,17 @@ class DashboardFragment : Fragment() {
             adapter = NoteRecyclerViewAdapter(this@DashboardFragment, binding.viewModel!!)
         }
         binding.viewModel?.apply {
-            showNewNoteViewEvent.observe(this@DashboardFragment, Observer { showNewNoteView() })
+            showNewNoteViewEvent.observe(this@DashboardFragment, Observer { showNewNoteView(it) })
             showViewNoteViewEvent.observe(this@DashboardFragment, Observer { showViewNoteView(it) })
         }
     }
 
-    private fun showNewNoteView() {
+    private fun showNewNoteView(type: NoteType) {
         findNavController().navigate(
-            R.id.navigation_edit_note,
-            bundleOf("mode" to "new")
+            when (type) {
+                NoteType.Text -> R.id.navigation_edit_text_note
+                NoteType.Map -> throw UnsupportedOperationException() // TODO:
+            }, bundleOf("mode" to "new")
         )
     }
 

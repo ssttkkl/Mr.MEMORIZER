@@ -149,15 +149,81 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:contentDescription="@string/new_note"
-            android:onClick="@{() -> viewModel.onClickNewNote()}"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
+        <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--            android:id="@+id/fab"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="bottom|end"-->
+        <!--            android:layout_margin="16dp"-->
+        <!--            android:contentDescription="@string/new_note"-->
+        <!--            android:onClick="@{() -> viewModel.onClickNewNote()}"-->
+        <!--            app:srcCompat="@drawable/ic_add_black_24dp" />-->
+
+        <com.nambimobile.widgets.efab.ExpandableFabLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- The next 3 Views will only display in portrait orientation -->
+            <com.nambimobile.widgets.efab.Overlay
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:overlay_orientation="portrait" />
+
+            <com.nambimobile.widgets.efab.ExpandableFab
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="@dimen/ui_margin_medium"
+                android:layout_marginBottom="@dimen/ui_margin_medium"
+                app:efab_orientation="portrait" />
+
+            <com.nambimobile.widgets.efab.FabOption
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onClickNewTextNote()}"
+                app:fab_icon="@drawable/ic_baseline_text_snippet_24"
+                app:fab_orientation="portrait"
+                app:label_text="@string/title_new_text_note" />
+
+            <com.nambimobile.widgets.efab.FabOption
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onClickNewMapNote()}"
+                app:fab_icon="@drawable/ic_baseline_map_24"
+                app:fab_orientation="portrait"
+                app:label_text="@string/title_new_map_note" />
+
+            <!-- The next 3 Views will only display in landscape orientation -->
+            <com.nambimobile.widgets.efab.Overlay
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:overlay_orientation="landscape" />
+
+            <com.nambimobile.widgets.efab.ExpandableFab
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="@dimen/ui_margin_medium"
+                android:layout_marginBottom="@dimen/ui_margin_medium"
+                app:efab_orientation="landscape" />
+
+            <com.nambimobile.widgets.efab.FabOption
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onClickNewTextNote()}"
+                app:fab_icon="@drawable/ic_baseline_text_snippet_24"
+                app:fab_orientation="landscape"
+                app:label_text="@string/title_new_text_note" />
+
+            <com.nambimobile.widgets.efab.FabOption
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onClickNewMapNote()}"
+                app:fab_icon="@drawable/ic_baseline_map_24"
+                app:fab_orientation="landscape"
+                app:label_text="@string/title_new_map_note" />
+
+        </com.nambimobile.widgets.efab.ExpandableFabLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
