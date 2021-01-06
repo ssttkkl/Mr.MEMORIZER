@@ -15,7 +15,7 @@
             app:destination="@id/navigation_view_note" />
         <action
             android:id="@+id/action_navigation_dashboard_to_navigation_edit_note"
-            app:destination="@id/navigation_edit_text_note" />
+            app:destination="@id/navigation_edit_note" />
     </fragment>
 
     <fragment
@@ -44,14 +44,19 @@
             app:argType="java.lang.Integer" />
         <action
             android:id="@+id/action_navigation_view_note_to_navigation_edit_note"
-            app:destination="@id/navigation_edit_text_note" />
+            app:destination="@id/navigation_edit_note" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_edit_text_note"
-        android:name="me.ssttkkl.mrmemorizer.ui.edittextnote.EditTextNoteFragment"
-        android:label="@string/title_edit_note"
-        tools:layout="@layout/fragment_edit_text_note">
+        android:id="@+id/navigation_edit_note"
+        android:name="me.ssttkkl.mrmemorizer.ui.editnote.EditNoteFragment"
+        tools:layout="@layout/fragment_edit_note">
+        <argument
+            android:name="mode"
+            app:argType="java.lang.String" />
+        <argument
+            android:name="noteType"
+            app:argType="me.ssttkkl.mrmemorizer.data.entity.NoteType" />
         <argument
             android:name="noteId"
             app:argType="java.lang.Long" />

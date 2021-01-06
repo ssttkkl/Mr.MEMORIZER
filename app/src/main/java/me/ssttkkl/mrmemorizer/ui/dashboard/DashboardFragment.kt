@@ -42,10 +42,11 @@ class DashboardFragment : Fragment() {
 
     private fun showNewNoteView(type: NoteType) {
         findNavController().navigate(
-            when (type) {
-                NoteType.Text -> R.id.navigation_edit_text_note
-                NoteType.Map -> throw UnsupportedOperationException() // TODO:
-            }, bundleOf("mode" to "new")
+            R.id.navigation_edit_note,
+            bundleOf(
+                "mode" to "new",
+                "noteType" to type
+            )
         )
     }
 

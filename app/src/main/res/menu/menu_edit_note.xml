@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_item_preview"
+        android:icon="@drawable/ic_preview_24dp"
+        android:title="@string/text_preview"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_item_save"
         android:icon="@drawable/ic_done_black_24dp"
         android:title="@string/title_save"

@@ -2,13 +2,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.edittextnote.EditTextNoteFragment">
+    tools:context=".ui.editnote.EditNoteFragment">
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
-            type="me.ssttkkl.mrmemorizer.ui.edittextnote.EditTextNoteViewModel" />
+            type="me.ssttkkl.mrmemorizer.ui.editnote.EditNoteViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -102,7 +104,7 @@
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:navigationIcon="?attr/homeAsUpIndicator"
-                app:title="@string/title_edit_note" />
+                app:title="@{viewModel.toolbarTitle}" />
         </com.google.android.material.appbar.AppBarLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

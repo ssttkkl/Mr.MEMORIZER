@@ -3,14 +3,15 @@
     <string name="title_dashboard">开始</string>
     <string name="title_note_list">笔记一览</string>
     <string name="title_statistics">数据统计</string>
-    <string name="title_edit_note">编辑笔记</string>
+    <string name="title_new_text_note">新建文本笔记</string>
+    <string name="title_new_map_note">新建思维导图</string>
+    <string name="title_edit_text_note">编辑文本笔记</string>
+    <string name="title_edit_map_note">编辑思维导图</string>
     <string name="title_save">保存</string>
     <string name="title_abort">放弃</string>
     <string name="title_view_note">查看笔记</string>
     <string name="title_edit">编辑</string>
     <string name="title_remove">删除</string>
-    <string name="title_new_text_note">新建文本笔记</string>
-    <string name="title_new_map_note">新建思维导图</string>
     <string name="text_title">标题</string>
     <string name="text_content">内容</string>
     <string name="text_review_progress">学习进度：%d/%d</string>
@@ -25,7 +26,7 @@
     <string name="text_item_count">%d项</string>
     <string name="text_nextReview">下一次复习</string>
     <string name="text_no_note_next_review">已经没有需要复习的笔记了</string>
-    <string name="text_no_note_ready_to_review">没有待复习的笔记了</string>
+    <string name="text_no_note_ready_to_review">已经没有待复习的笔记了</string>
     <string name="do_review">完成复习</string>
     <string name="text_category">分类</string>
     <string name="text_uncategorized">未分类</string>
@@ -38,4 +39,5 @@
     <string name="review_notification_channel_name">笔记复习提醒</string>
     <string name="review_notification_title">笔记复习提醒</string>
     <string name="review_notification_content">笔记《%s》待复习</string>
+    <string name="text_preview">预览</string>
 </resources>
