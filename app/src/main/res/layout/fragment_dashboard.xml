@@ -46,6 +46,18 @@
                     app:layout_constraintTop_toTopOf="@id/textView_readyToReview"
                     tools:text="0项" />
 
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/ui_margin_medium"
+                    android:onClick="@{() -> viewModel.onClickSettings()}"
+                    android:text="@string/title_settings"
+                    app:icon="@drawable/ic_settings_24dp"
+                    app:layout_constraintBottom_toBottomOf="@id/textView_readyToReview"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/textView_readyToReview" />
+
                 <FrameLayout
                     android:id="@+id/frameLayout_readyToReview"
                     android:layout_width="0dp"

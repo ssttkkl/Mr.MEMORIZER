@@ -32,11 +32,12 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.listReadyToReview.apply {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            adapter = NoteRecyclerViewAdapter(this@DashboardFragment, binding.viewModel!!)
+            adapter = NoteRecyclerViewAdapter(viewLifecycleOwner, binding.viewModel!!)
         }
         binding.viewModel?.apply {
-            showNewNoteViewEvent.observe(this@DashboardFragment, Observer { showNewNoteView(it) })
-            showViewNoteViewEvent.observe(this@DashboardFragment, Observer { showViewNoteView(it) })
+            showNewNoteViewEvent.observe(viewLifecycleOwner, Observer { showNewNoteView(it) })
+            showViewNoteViewEvent.observe(viewLifecycleOwner, Observer { showViewNoteView(it) })
+            showSettingsViewEvent.observe(viewLifecycleOwner, Observer { showSettingsView() })
         }
     }
 
@@ -54,6 +55,12 @@ class DashboardFragment : Fragment() {
         findNavController().navigate(
             R.id.navigation_view_note,
             bundleOf("noteId" to note.noteId)
+        )
+    }
+
+    private fun showSettingsView() {
+        findNavController().navigate(
+            R.id.action_navigation_dashboard_to_navigation_settings
         )
     }
 }

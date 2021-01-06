@@ -9,9 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.ssttkkl.mrmemorizer.AppPreferences
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
-import me.ssttkkl.mrmemorizer.res.ReviewStage
 
 class SetupAlarmService : IntentService("NotifyService") {
 
@@ -22,7 +22,7 @@ class SetupAlarmService : IntentService("NotifyService") {
 
                 val nextReviewNote = withContext(Dispatchers.IO) {
                     AppDatabase.getInstance().noteDao.getNoteNextReviewSync(
-                        ReviewStage.nextReviewDuration.size
+                        AppPreferences.reviewInterval.size
                     )
                 }
 

@@ -26,7 +26,7 @@
     <string name="text_item_count">%d项</string>
     <string name="text_nextReview">下一次复习</string>
     <string name="text_no_note_next_review">已经没有需要复习的笔记了</string>
-    <string name="text_no_note_ready_to_review">已经没有待复习的笔记了</string>
+    <string name="text_no_note_ready_to_review">没有待复习的笔记了</string>
     <string name="do_review">完成复习</string>
     <string name="text_category">分类</string>
     <string name="text_uncategorized">未分类</string>
@@ -40,4 +40,9 @@
     <string name="review_notification_title">笔记复习提醒</string>
     <string name="review_notification_content">笔记《%s》待复习</string>
     <string name="text_preview">预览</string>
+    <string name="title_settings">设置</string>
+    <string name="settings_category_review_interval">复习间隔</string>
+    <string name="settings_title_edit_review_interval">手动调节</string>
+    <string name="settings_key_edit_review_interval">edit_review_interval</string>
+    <string name="settings_key_review_interval">review_interval</string>
 </resources>

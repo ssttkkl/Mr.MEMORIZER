@@ -5,12 +5,12 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.toLiveData
 import kotlinx.coroutines.*
+import me.ssttkkl.mrmemorizer.AppPreferences
 import me.ssttkkl.mrmemorizer.MyApp
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.data.entity.NoteType
-import me.ssttkkl.mrmemorizer.res.ReviewStage
 import me.ssttkkl.mrmemorizer.ui.utils.LiveTicker
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 import me.ssttkkl.mrmemorizer.ui.utils.getNextReviewTimeText
@@ -28,14 +28,17 @@ class DashboardViewModel : ViewModel() {
         fun newWorker() = GlobalScope.launch {
             while (true) {
                 val next = withContext(Dispatchers.IO) {
-                    AppDatabase.getInstance().noteDao.getNoteNextReviewSync(ReviewStage.nextReviewDuration.size - 1)
+                    AppDatabase.getInstance().noteDao.getNoteNextReviewSync(AppPreferences.reviewInterval.size - 1)
                 }.also { postValue(it) } ?: break
                 delay(next.nextNotifyTime.toInstant().toEpochMilli() - Instant.now().toEpochMilli())
             }
         }
 
         init {
-            addSource(AppDatabase.getInstance().noteDao.getNoteNextReview(ReviewStage.nextReviewDuration.size)) {
+            addSource(
+                AppDatabase.getInstance().noteDao
+                    .getNoteNextReview(AppPreferences.reviewInterval.size - 1)
+            ) {
                 worker?.cancel()
                 worker = newWorker()
             }
@@ -60,9 +63,9 @@ class DashboardViewModel : ViewModel() {
     fun getNoteNextReviewTimeText(note: Note?) = note.getNextReviewTimeText(tick)
 
     val notesReadyToReview = Transformations.switchMap(noteNextReview) {
-        AppDatabase.getInstance().noteDao.loadNotesReadyToReview(
-            ReviewStage.nextReviewDuration.size - 1
-        ).toLiveData(pageSize = 50)
+        AppDatabase.getInstance().noteDao
+            .loadNotesReadyToReview(AppPreferences.reviewInterval.size - 1)
+            .toLiveData(pageSize = 50)
     }
     val noteReadyToReviewCount = Transformations.map(notesReadyToReview) {
         MyApp.context.getString(R.string.text_item_count, it.size)
@@ -73,8 +76,10 @@ class DashboardViewModel : ViewModel() {
 
     val showNewNoteViewEvent = SingleLiveEvent<NoteType>()
     val showViewNoteViewEvent = SingleLiveEvent<Note>()
+    val showSettingsViewEvent = SingleLiveEvent<Unit>()
 
     fun onClickNewTextNote() = showNewNoteViewEvent.call(NoteType.Text)
     fun onClickNewMapNote() = showNewNoteViewEvent.call(NoteType.Map)
     fun onClickNote(note: Note) = showViewNoteViewEvent.call(note)
+    fun onClickSettings() = showSettingsViewEvent.call()
 }

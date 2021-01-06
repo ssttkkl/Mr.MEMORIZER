@@ -7,11 +7,11 @@ import androidx.room.withTransaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import me.ssttkkl.mrmemorizer.AppPreferences
 import me.ssttkkl.mrmemorizer.MyApp
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.data.entity.Note
-import me.ssttkkl.mrmemorizer.res.ReviewStage
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 import java.time.OffsetDateTime
 import java.util.concurrent.atomic.AtomicBoolean
@@ -32,11 +32,11 @@ class ViewNoteViewModel : ViewModel() {
         MyApp.context.getString(
             R.string.text_review_progress,
             it.stage,
-            ReviewStage.nextReviewDuration.size - 1
+            AppPreferences.reviewInterval.size - 1
         )
     }
     val nextReviewTimeText = Transformations.map(note) {
-        if (it.stage == ReviewStage.nextReviewDuration.size)
+        if (it.stage == AppPreferences.reviewInterval.size)
             MyApp.context.getString(R.string.text_next_review_time_value_closed)
         else {
             val restSecond =
@@ -59,7 +59,7 @@ class ViewNoteViewModel : ViewModel() {
         }
     }
     val doReviewButtonVisible = Transformations.map(note) {
-        if (it.stage == ReviewStage.nextReviewDuration.size)
+        if (it.stage == AppPreferences.reviewInterval.size)
             false
         else
             !it.nextNotifyTime.isAfter(OffsetDateTime.now())
@@ -88,9 +88,9 @@ class ViewNoteViewModel : ViewModel() {
                 categoryId = originNote.categoryId,
                 createTime = originNote.createTime,
                 stage = originNote.stage + 1,
-                nextNotifyTime = if (originNote.stage + 1 < ReviewStage.nextReviewDuration.size)
+                nextNotifyTime = if (originNote.stage + 1 < AppPreferences.reviewInterval.size)
                     OffsetDateTime.now()
-                        .plusSeconds(ReviewStage.nextReviewDuration[originNote.stage + 1])
+                        .plusSeconds(AppPreferences.reviewInterval[originNote.stage + 1].toLong())
                 else // 这个值已经没用了
                     OffsetDateTime.now()
             )

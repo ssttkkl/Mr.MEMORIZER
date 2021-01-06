@@ -94,7 +94,7 @@ class EditNoteViewModel : ViewModel() {
 
                 when (mode) {
                     Mode.New -> {
-                        val note = Note(
+                        val note = Note.newNote(
                             noteType = noteType.value!!,
                             title = noteTitle.value ?: "",
                             content = noteContent.value ?: "",
