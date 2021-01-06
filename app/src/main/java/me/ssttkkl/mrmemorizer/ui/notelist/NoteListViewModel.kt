@@ -11,6 +11,7 @@ import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.data.entity.NoteType
 import me.ssttkkl.mrmemorizer.ui.utils.LiveTicker
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
+import me.ssttkkl.mrmemorizer.ui.utils.getNextReviewTimeText
 
 class NoteListViewModel : ViewModel() {
 
@@ -51,25 +52,9 @@ class NoteListViewModel : ViewModel() {
     )
     val tabData = listOf(allTypeNotes, textNotes, mapNotes)
 
-    private val ticker = LiveTicker(30 * 1000)
-    fun getNextReviewTimeText(note: Note): LiveData<String> = ticker.map {
-        val restSecond = note.nextNotifyTime.toEpochSecond() - it / 1000
-        when {
-            restSecond < 0 -> MyApp.context.getString(R.string.text_next_review_time_value_ready)
-            restSecond / 60 in 0 until 60 -> MyApp.context.getString(
-                R.string.text_next_review_time_value_at_minute,
-                restSecond / 60
-            )
-            restSecond / 3600 in 0 until 24 -> MyApp.context.getString(
-                R.string.text_next_review_time_value_at_hour,
-                restSecond / 3600
-            )
-            else -> MyApp.context.getString(
-                R.string.text_next_review_time_value_at_day,
-                restSecond / 86400
-            )
-        }
-    }
+    private val tick = LiveTicker(1000)
+
+    fun getNoteNextReviewTimeText(note: Note?) = note.getNextReviewTimeText(tick)
 
     val showViewNoteViewEvent = SingleLiveEvent<Note>()
 

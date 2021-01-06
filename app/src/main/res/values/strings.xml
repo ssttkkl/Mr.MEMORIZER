@@ -14,6 +14,7 @@
     <string name="text_content">内容</string>
     <string name="text_review_progress">学习进度：%d/%d</string>
     <string name="text_next_review_time">下一次复习：</string>
+    <string name="text_next_review_time_value_at_second">%d秒后</string>
     <string name="text_next_review_time_value_at_minute">%d分钟后</string>
     <string name="text_next_review_time_value_at_hour">%d小时后</string>
     <string name="text_next_review_time_value_at_day">%d天后</string>
