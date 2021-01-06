@@ -14,6 +14,6 @@
     </fragment>
     <fragment
         android:id="@+id/editReviewIntervalFragment"
-        android:name="me.ssttkkl.mrmemorizer.ui.settings.editreviewinterval.EditReviewIntervalFragment"
+        android:name="me.ssttkkl.mrmemorizer.ui.settings.editinterval.EditIntervalFragment"
         android:label="@string/settings_title_edit_review_interval" />
 </navigation>

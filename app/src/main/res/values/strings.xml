@@ -16,10 +16,10 @@
     <string name="text_content">内容</string>
     <string name="text_review_progress">学习进度：%d/%d</string>
     <string name="text_next_review_time">下一次复习：</string>
-    <string name="text_next_review_time_value_at_second">%d秒后</string>
-    <string name="text_next_review_time_value_at_minute">%d分钟后</string>
-    <string name="text_next_review_time_value_at_hour">%d小时后</string>
-    <string name="text_next_review_time_value_at_day">%d天后</string>
+    <string name="text_next_review_time_value_at_second">%.0f秒后</string>
+    <string name="text_next_review_time_value_at_minute">%.0f分钟后</string>
+    <string name="text_next_review_time_value_at_hour">%.1f小时后</string>
+    <string name="text_next_review_time_value_at_day">%.2f天后</string>
     <string name="text_next_review_time_value_ready">待复习</string>
     <string name="text_next_review_time_value_closed">无需复习</string>
     <string name="text_readyToReview">待复习</string>
@@ -42,7 +42,10 @@
     <string name="text_preview">预览</string>
     <string name="title_settings">设置</string>
     <string name="settings_category_review_interval">复习间隔</string>
-    <string name="settings_title_edit_review_interval">手动调节</string>
-    <string name="settings_key_edit_review_interval">edit_review_interval</string>
     <string name="settings_key_review_interval">review_interval</string>
+    <string name="settings_title_edit_review_interval">手动修改</string>
+    <string name="settings_key_edit_review_interval">edit_review_interval</string>
+    <string name="settings_title_auto_adjust_review_interval">自动调节</string>
+    <string name="settings_key_auto_adjust_review_interval">auto_adjust_review_interval</string>
+    <string name="title_add">添加</string>
 </resources>

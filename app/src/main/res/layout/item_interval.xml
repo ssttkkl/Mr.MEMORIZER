@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="position"
+            type="int" />
+
+        <variable
+            name="text"
+            type="java.lang.String" />
+
+        <variable
+            name="viewModel"
+            type="me.ssttkkl.mrmemorizer.ui.settings.editinterval.EditIntervalViewModel" />
+    </data>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> viewModel.onClickEditItem(position)}"
+        android:padding="@dimen/ui_margin_medium"
+        android:text="@{text}"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        tools:text="5分钟" />
+</layout>

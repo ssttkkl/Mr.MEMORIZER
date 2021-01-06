@@ -95,7 +95,9 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE stage <= :maxStage AND next_notify_time > strftime('%s','now') ORDER BY next_notify_time LIMIT 1")
     fun getNoteNextReview(maxStage: Int): LiveData<Note>
 
-    // 注意：返回的LiveData只在数据库有变动时更新
     @Query("SELECT * FROM note WHERE stage <= :maxStage AND next_notify_time > strftime('%s','now') ORDER BY next_notify_time LIMIT 1")
     fun getNoteNextReviewSync(maxStage: Int): Note?
+
+    @Query("SELECT * FROM note WHERE stage > :stageGreaterThan")
+    fun getNotesWhereStageGreaterThan(stageGreaterThan: Int): List<Note>
 }

@@ -6,6 +6,10 @@
             app:key="@string/settings_key_edit_review_interval"
             app:title="@string/settings_title_edit_review_interval" />
 
+        <Preference
+            app:key="@string/settings_key_auto_adjust_review_interval"
+            app:title="@string/settings_title_auto_adjust_review_interval" />
+
         <!--        <ListPreference-->
         <!--            app:defaultValue="reply"-->
         <!--            app:entries="@array/reply_entries"-->

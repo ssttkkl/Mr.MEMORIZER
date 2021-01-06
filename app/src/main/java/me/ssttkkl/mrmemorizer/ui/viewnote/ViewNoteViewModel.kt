@@ -12,7 +12,9 @@ import me.ssttkkl.mrmemorizer.MyApp
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.data.entity.Note
+import me.ssttkkl.mrmemorizer.ui.utils.LiveTicker
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
+import me.ssttkkl.mrmemorizer.ui.utils.getNextReviewTimeText
 import java.time.OffsetDateTime
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -32,37 +34,19 @@ class ViewNoteViewModel : ViewModel() {
         MyApp.context.getString(
             R.string.text_review_progress,
             it.stage,
-            AppPreferences.reviewInterval.size - 1
+            AppPreferences.reviewInterval.size
         )
     }
-    val nextReviewTimeText = Transformations.map(note) {
-        if (it.stage == AppPreferences.reviewInterval.size)
-            MyApp.context.getString(R.string.text_next_review_time_value_closed)
-        else {
-            val restSecond =
-                it.nextNotifyTime.toEpochSecond() - OffsetDateTime.now().toEpochSecond()
-            when {
-                restSecond < 0 -> MyApp.context.getString(R.string.text_next_review_time_value_ready)
-                restSecond / 60 in 0 until 60 -> MyApp.context.getString(
-                    R.string.text_next_review_time_value_at_minute,
-                    restSecond / 60
-                )
-                restSecond / 3600 in 0 until 24 -> MyApp.context.getString(
-                    R.string.text_next_review_time_value_at_hour,
-                    restSecond / 3600
-                )
-                else -> MyApp.context.getString(
-                    R.string.text_next_review_time_value_at_day,
-                    restSecond / 86400
-                )
-            }
-        }
+
+    val tick = LiveTicker(1000)
+    val nextReviewTimeText = Transformations.switchMap(note) {
+        it.getNextReviewTimeText(tick)
     }
-    val doReviewButtonVisible = Transformations.map(note) {
-        if (it.stage == AppPreferences.reviewInterval.size)
-            false
-        else
-            !it.nextNotifyTime.isAfter(OffsetDateTime.now())
+    val doReviewButtonVisible = Transformations.switchMap(note) {
+        Transformations.map(tick) { tick ->
+            (it.stage != AppPreferences.reviewInterval.size) &&
+                    (tick >= it.nextNotifyTime.toInstant().toEpochMilli())
+        }
     }
 
     val showEditNoteViewEvent = SingleLiveEvent<Unit>()

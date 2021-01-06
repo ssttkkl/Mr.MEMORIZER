@@ -25,16 +25,14 @@ object AppPreferences {
     private val pref = PreferenceManager.getDefaultSharedPreferences(MyApp.context)
 
     var reviewInterval: List<Int>
-        get() = pref.getString(
-            KEY_REVIEW_INTERVAL, null
-        )
+        get() = pref.getString(KEY_REVIEW_INTERVAL, null)
             ?.split('|')?.map { it.toInt() }
             ?: defaultReviewInterval // in second
         set(value) {
             pref.edit()
                 .putString(
                     KEY_REVIEW_INTERVAL,
-                    value.joinToString("|") { it.toString() }
+                    value.sorted().joinToString("|") { it.toString() }
                 ).apply()
         }
 
