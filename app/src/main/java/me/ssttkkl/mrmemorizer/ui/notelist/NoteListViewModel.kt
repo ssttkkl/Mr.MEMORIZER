@@ -9,7 +9,6 @@ import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.data.entity.Category
 import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.data.entity.NoteType
-import me.ssttkkl.mrmemorizer.ui.utils.LiveTicker
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 import me.ssttkkl.mrmemorizer.ui.utils.getNextReviewTimeText
 
@@ -52,9 +51,7 @@ class NoteListViewModel : ViewModel() {
     )
     val tabData = listOf(allTypeNotes, textNotes, mapNotes)
 
-    private val tick = LiveTicker(1000)
-
-    fun getNoteNextReviewTimeText(note: Note?) = note.getNextReviewTimeText(tick)
+    fun getNoteNextReviewTimeText(note: Note?) = note.getNextReviewTimeText()
 
     val showViewNoteViewEvent = SingleLiveEvent<Note>()
 

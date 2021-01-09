@@ -3,6 +3,7 @@ package me.ssttkkl.mrmemorizer.data.converter
 import androidx.room.TypeConverter
 import java.time.Instant
 import java.time.OffsetDateTime
+import java.time.ZoneId
 
 class OffsetDateTimeConverter {
     @TypeConverter
@@ -10,7 +11,8 @@ class OffsetDateTimeConverter {
 
     @TypeConverter
     fun timestampToDatetime(timestamp: Long): OffsetDateTime {
-        val offset = OffsetDateTime.now().offset
-        return Instant.ofEpochSecond(timestamp).atOffset(offset)
+        val instant = Instant.ofEpochSecond(timestamp)
+        val offset = ZoneId.systemDefault().rules.getOffset(instant)
+        return instant.atOffset(offset)
     }
 }

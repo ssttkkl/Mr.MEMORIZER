@@ -23,7 +23,7 @@ class NoteRecyclerViewAdapter(
 ) : PagedListAdapter<Note, NoteRecyclerViewAdapter.ViewHolder>(noteItemCallback) {
 
     init {
-        viewModel.notesReadyToReview.observe(lifecycleOwner, Observer {
+        viewModel.notesTodayReview.observe(lifecycleOwner, Observer {
             submitList(it)
         })
     }

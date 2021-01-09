@@ -37,7 +37,6 @@ class DashboardFragment : Fragment() {
         binding.viewModel?.apply {
             showNewNoteViewEvent.observe(viewLifecycleOwner, Observer { showNewNoteView(it) })
             showViewNoteViewEvent.observe(viewLifecycleOwner, Observer { showViewNoteView(it) })
-            showSettingsViewEvent.observe(viewLifecycleOwner, Observer { showSettingsView() })
         }
     }
 
@@ -55,12 +54,6 @@ class DashboardFragment : Fragment() {
         findNavController().navigate(
             R.id.navigation_view_note,
             bundleOf("noteId" to note.noteId)
-        )
-    }
-
-    private fun showSettingsView() {
-        findNavController().navigate(
-            R.id.action_navigation_dashboard_to_navigation_settings
         )
     }
 }

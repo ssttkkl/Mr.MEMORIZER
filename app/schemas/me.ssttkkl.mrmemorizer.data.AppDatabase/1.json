@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6ed806e266803129585c68337fbc6a71",
+    "identityHash": "949b4bbd3822006dd465d2f09d9081cb",
     "entities": [
       {
         "tableName": "note",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`note_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `note_type` INTEGER NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `category_id` INTEGER NOT NULL, `create_time` INTEGER NOT NULL, `stage` INTEGER NOT NULL, `next_notify_time` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`note_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `note_type` INTEGER NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `category_id` INTEGER NOT NULL, `create_time` INTEGER NOT NULL, `repetition_number` INTEGER NOT NULL, `easiness_factor` REAL NOT NULL, `review_interval_days` INTEGER NOT NULL, `next_review_date` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "noteId",
@@ -45,14 +45,26 @@
             "notNull": true
           },
           {
-            "fieldPath": "stage",
-            "columnName": "stage",
+            "fieldPath": "repetitionNumber",
+            "columnName": "repetition_number",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "nextNotifyTime",
-            "columnName": "next_notify_time",
+            "fieldPath": "easinessFactor",
+            "columnName": "easiness_factor",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reviewIntervalDays",
+            "columnName": "review_interval_days",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nextReviewDate",
+            "columnName": "next_review_date",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -96,7 +108,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6ed806e266803129585c68337fbc6a71')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '949b4bbd3822006dd465d2f09d9081cb')"
     ]
   }
 }

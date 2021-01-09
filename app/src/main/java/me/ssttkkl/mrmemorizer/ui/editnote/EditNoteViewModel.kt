@@ -105,15 +105,10 @@ class EditNoteViewModel : ViewModel() {
                     Mode.Edit -> {
                         val origin = originNote!!
                         GlobalScope.launch(Dispatchers.IO) {
-                            val note = Note(
-                                noteType = noteType.value!!,
-                                noteId = origin.noteId,
+                            val note = origin.copy(
                                 title = noteTitle.value ?: "",
                                 content = noteContent.value ?: "",
-                                categoryId = categoryId,
-                                createTime = origin.createTime,
-                                stage = origin.stage,
-                                nextNotifyTime = origin.nextNotifyTime
+                                categoryId = categoryId
                             )
                             db.noteDao.updateNoteSync(note)
                             db.categoryDao.autoDeleteCategorySync(origin.categoryId)

@@ -5,8 +5,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
-import me.ssttkkl.mrmemorizer.AppPreferences
+import java.time.LocalDate
 import java.time.OffsetDateTime
+import kotlin.math.ceil
+import kotlin.math.min
 
 @Parcelize
 @Entity(tableName = "note")
@@ -17,9 +19,42 @@ data class Note(
     val content: String,
     @ColumnInfo(name = "category_id") val categoryId: Int,
     @ColumnInfo(name = "create_time") val createTime: OffsetDateTime,
-    val stage: Int,
-    @ColumnInfo(name = "next_notify_time") val nextNotifyTime: OffsetDateTime
+    @ColumnInfo(name = "repetition_number") val repetitionNumber: Int = 0,
+    @ColumnInfo(name = "easiness_factor") val easinessFactor: Double = 2.5,
+    @ColumnInfo(name = "review_interval_days") val reviewIntervalDays: Long = 1,
+    @ColumnInfo(name = "next_review_date") val nextReviewDate: LocalDate
 ) : Parcelable {
+
+    // REF: https://en.wikipedia.org/wiki/SuperMemo#Description_of_SM-2_algorithm
+    fun sm2(userGrade: Int): Note {
+        if (userGrade !in 0..5)
+            error("userGrade must be in 0..5")
+
+        var newRepetitionNumber = 0
+        var newReviewInterval = 1L
+        var newEasinessFactor = easinessFactor
+
+        if (userGrade >= 3) {
+            newRepetitionNumber = repetitionNumber + 1
+            newReviewInterval = when (repetitionNumber) {
+                0 -> 1
+                1 -> 6
+                else -> ceil(reviewIntervalDays * easinessFactor).toLong()
+            }
+            newEasinessFactor = min(
+                1.3,
+                easinessFactor + (0.1 - (5 - userGrade) * (0.08 + (5 - userGrade) * 0.02))
+            )
+        }
+
+        return this.copy(
+            repetitionNumber = newRepetitionNumber,
+            reviewIntervalDays = newReviewInterval,
+            easinessFactor = newEasinessFactor,
+            nextReviewDate = nextReviewDate.plusDays(newReviewInterval)
+        )
+    }
+
     companion object {
         fun newNote(
             noteType: NoteType,
@@ -29,14 +64,12 @@ data class Note(
         ): Note {
             val now = OffsetDateTime.now()
             return Note(
-                noteId = 0,
                 noteType = noteType,
                 title = title,
                 content = content,
                 categoryId = categoryId,
                 createTime = now,
-                stage = 0,
-                nextNotifyTime = now.plusSeconds(AppPreferences.reviewInterval[0].toLong())
+                nextReviewDate = now.toLocalDate().plusDays(1)
             )
         }
     }

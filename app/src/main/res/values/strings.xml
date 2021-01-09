@@ -14,20 +14,14 @@
     <string name="title_remove">删除</string>
     <string name="text_title">标题</string>
     <string name="text_content">内容</string>
-    <string name="text_review_progress">学习进度：%d/%d</string>
     <string name="text_next_review_time">下一次复习：</string>
-    <string name="text_next_review_time_value_at_second">%.0f秒后</string>
-    <string name="text_next_review_time_value_at_minute">%.0f分钟后</string>
-    <string name="text_next_review_time_value_at_hour">%.1f小时后</string>
-    <string name="text_next_review_time_value_at_day">%.2f天后</string>
+    <string name="text_next_review_time_value_at_day">%d天后</string>
     <string name="text_next_review_time_value_ready">待复习</string>
-    <string name="text_next_review_time_value_closed">无需复习</string>
     <string name="text_readyToReview">待复习</string>
     <string name="text_item_count">%d项</string>
     <string name="text_nextReview">下一次复习</string>
-    <string name="text_no_note_next_review">已经没有需要复习的笔记了</string>
-    <string name="text_no_note_ready_to_review">没有待复习的笔记了</string>
-    <string name="do_review">完成复习</string>
+    <string name="text_no_note_ready_to_review">今天已经没有待复习的笔记了</string>
+    <string name="text_do_review">完成复习</string>
     <string name="text_category">分类</string>
     <string name="text_uncategorized">未分类</string>
     <string name="text_all_category">所有分类</string>
@@ -38,7 +32,7 @@
 
     <string name="review_notification_channel_name">笔记复习提醒</string>
     <string name="review_notification_title">笔记复习提醒</string>
-    <string name="review_notification_content">笔记《%s》待复习</string>
+    <string name="review_notification_content">今天还有%d篇笔记需要复习</string>
     <string name="text_preview">预览</string>
     <string name="title_settings">设置</string>
     <string name="settings_category_review_interval">复习间隔</string>
@@ -48,4 +42,14 @@
     <string name="settings_title_auto_adjust_review_interval">自动调节</string>
     <string name="settings_key_auto_adjust_review_interval">auto_adjust_review_interval</string>
     <string name="title_add">添加</string>
+    <string name="text_show">显示</string>
+    <string name="text_hide">隐藏</string>
+    <string name="text_note_hided_hint">笔记已隐藏\n请先尝试回想笔记的内容\n然后点击按钮展示笔记</string>
+    <string name="text_review_grade_0">0：完全记不起来</string>
+    <string name="text_review_grade_1">1：看过笔记之后稍微有点印象</string>
+    <string name="text_review_grade_2">2：看过笔记之后才能记起来</string>
+    <string name="text_review_grade_3">3：努力思考了一会儿才能记起来</string>
+    <string name="text_review_grade_4">4：稍微思考了一会儿就能记起来</string>
+    <string name="text_review_grade_5">5：完全可以记起来</string>
+    <string name="text_review_note_hint">请选择你在回忆这篇笔记时最符合的选项：</string>
 </resources>

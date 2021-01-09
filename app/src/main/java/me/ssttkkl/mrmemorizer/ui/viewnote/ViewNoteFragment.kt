@@ -32,8 +32,9 @@ class ViewNoteFragment : Fragment() {
         setHasOptionsMenu(true)
 
         binding.viewModel?.apply {
-            showEditNoteViewEvent.observe(this@ViewNoteFragment, Observer { showEditNoteView() })
-            finishEvent.observe(this@ViewNoteFragment, Observer { finish() })
+            showEditNoteViewEvent.observe(viewLifecycleOwner, Observer { showEditNoteView(it) })
+            showDoReviewViewEvent.observe(viewLifecycleOwner, Observer { showDoReviewView(it) })
+            finishEvent.observe(viewLifecycleOwner, Observer { finish() })
         }
     }
 
@@ -52,14 +53,19 @@ class ViewNoteFragment : Fragment() {
         return true
     }
 
-    private fun showEditNoteView() {
+    private fun showEditNoteView(noteId: Int) {
         findNavController().navigate(
             R.id.navigation_edit_note,
             bundleOf(
                 "mode" to "edit",
-                "noteId" to binding.viewModel?.noteId?.value!!
+                "noteId" to noteId
             )
         )
+    }
+
+    private fun showDoReviewView(noteId: Int) {
+        ReviewNoteDialogFragment.newInstance(noteId)
+            .show(childFragmentManager, null)
     }
 
     private fun finish() {

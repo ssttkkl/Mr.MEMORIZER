@@ -16,9 +16,6 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_navigation_edit_note"
             app:destination="@id/navigation_edit_note" />
-        <action
-            android:id="@+id/action_navigation_dashboard_to_navigation_settings"
-            app:destination="@id/navigation_settings" />
     </fragment>
 
     <fragment
@@ -64,8 +61,4 @@
             android:name="noteId"
             app:argType="java.lang.Long" />
     </fragment>
-    <activity
-        android:id="@+id/navigation_settings"
-        android:name="me.ssttkkl.mrmemorizer.ui.settings.SettingsActivity"
-        android:label="@string/title_settings" />
 </navigation>

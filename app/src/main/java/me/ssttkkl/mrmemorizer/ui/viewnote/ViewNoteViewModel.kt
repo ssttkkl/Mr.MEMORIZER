@@ -1,28 +1,28 @@
 package me.ssttkkl.mrmemorizer.ui.viewnote
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import androidx.room.withTransaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import me.ssttkkl.mrmemorizer.AppPreferences
 import me.ssttkkl.mrmemorizer.MyApp
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
-import me.ssttkkl.mrmemorizer.data.entity.Note
-import me.ssttkkl.mrmemorizer.ui.utils.LiveTicker
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 import me.ssttkkl.mrmemorizer.ui.utils.getNextReviewTimeText
-import java.time.OffsetDateTime
+import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ViewNoteViewModel : ViewModel() {
 
-    val noteId = MutableLiveData<Int>()
+    val noteId = MutableLiveData(0)
     val note = Transformations.switchMap(noteId) {
         AppDatabase.getInstance().noteDao.getNoteById(it)
+    }.apply {
+        observeForever {
+            fabStage.value = // 当笔记待复习时为0，否则为-1
+                if (it != null && !LocalDate.now().isBefore(it.nextReviewDate)) 0 else -1
+        }
     }
     val category = Transformations.switchMap(note) {
         if (it.categoryId == 0)
@@ -30,26 +30,27 @@ class ViewNoteViewModel : ViewModel() {
         else
             AppDatabase.getInstance().categoryDao.getCategoryById(it.categoryId)
     }
-    val reviewProgressText = Transformations.map(note) {
-        MyApp.context.getString(
-            R.string.text_review_progress,
-            it.stage,
-            AppPreferences.reviewInterval.size
-        )
-    }
 
-    val tick = LiveTicker(1000)
     val nextReviewTimeText = Transformations.switchMap(note) {
-        it.getNextReviewTimeText(tick)
-    }
-    val doReviewButtonVisible = Transformations.switchMap(note) {
-        Transformations.map(tick) { tick ->
-            (it.stage != AppPreferences.reviewInterval.size) &&
-                    (tick >= it.nextNotifyTime.toInstant().toEpochMilli())
-        }
+        it.getNextReviewTimeText()
     }
 
-    val showEditNoteViewEvent = SingleLiveEvent<Unit>()
+    val fabStage = MutableLiveData(-1) // -1：隐藏（笔记未到复习时间）；0: 点击展示笔记；1: 点击按钮完成复习
+    val isFabVisible = fabStage.map { it != -1 }
+
+    val noteContent = MediatorLiveData<String>().apply {
+        fun updateValue() {
+            value = if (fabStage.value == 0)
+                MyApp.context.getString(R.string.text_note_hided_hint)
+            else
+                note.value?.content ?: ""
+        }
+        addSource(note) { updateValue() }
+        addSource(fabStage) { updateValue() }
+    }
+
+    val showEditNoteViewEvent = SingleLiveEvent<Int>()
+    val showDoReviewViewEvent = SingleLiveEvent<Int>()
     val finishEvent = SingleLiveEvent<Unit>()
 
     private val initialized = AtomicBoolean(false)
@@ -60,31 +61,15 @@ class ViewNoteViewModel : ViewModel() {
         }
     }
 
-    fun onClickDoReview() {
-        GlobalScope.launch(Dispatchers.IO) {
-            val originNote =
-                AppDatabase.getInstance().noteDao.getNoteByIdSync(noteId.value!!) ?: return@launch
-            val note = Note(
-                noteType = originNote.noteType,
-                noteId = originNote.noteId,
-                title = originNote.title,
-                content = originNote.content,
-                categoryId = originNote.categoryId,
-                createTime = originNote.createTime,
-                stage = originNote.stage + 1,
-                nextNotifyTime = if (originNote.stage + 1 < AppPreferences.reviewInterval.size)
-                    OffsetDateTime.now()
-                        .plusSeconds(AppPreferences.reviewInterval[originNote.stage + 1].toLong())
-                else // 这个值已经没用了
-                    OffsetDateTime.now()
-            )
-            AppDatabase.getInstance().noteDao.updateNoteSync(note)
-        }
-        finishEvent.call()
+    fun onClickFab() {
+        if (fabStage.value == 0)
+            fabStage.value = 1
+        else
+            showDoReviewViewEvent.call(noteId.value)
     }
 
     fun onClickEdit() {
-        showEditNoteViewEvent.call()
+        showEditNoteViewEvent.call(noteId.value)
     }
 
     fun onClickRemove() {

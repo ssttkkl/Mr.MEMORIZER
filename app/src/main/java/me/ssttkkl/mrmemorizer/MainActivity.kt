@@ -3,12 +3,10 @@ package me.ssttkkl.mrmemorizer
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.service.SetupAlarmService
 
 val TOP_DEST = setOf(
@@ -38,12 +36,6 @@ class MainActivity : AppCompatActivity() {
                 View.GONE
         }
 
-        // 返回的LiveData只在数据库有变动时更新
-        // 但是只有在数据库变动的时候才需要重新设置，所以没问题
-        AppDatabase.getInstance().noteDao
-            .getNoteNextReview(AppPreferences.reviewInterval.size)
-            .observe(this, Observer {
-                SetupAlarmService.startSetupAlarm(this)
-            })
+        SetupAlarmService.startSetupAlarm(this)
     }
 }
