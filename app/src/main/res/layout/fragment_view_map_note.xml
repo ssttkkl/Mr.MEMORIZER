@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="me.ssttkkl.mrmemorizer.ui.viewnote.ViewNoteViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textView_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{viewModel.category != null ? viewModel.category.name : @string/text_uncategorized}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/text_uncategorized" />
+
+                <TextView
+                    android:id="@+id/textView_reviewProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{@string/text_next_review_time + viewModel.nextReviewTimeText}"
+                    app:layout_constraintStart_toEndOf="@id/textView_category"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="下一次复习：5天后" />
+
+                <TextView
+                    android:id="@+id/textView_content"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="@{viewModel.noteContent}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView_reviewProgress"
+                    tools:text="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" />
+
+                <com.otaliastudios.zoom.ZoomLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:hasClickableChildren="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView_content">
+
+                    <de.blox.graphview.GraphView
+                        android:id="@+id/graph"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:lineColor="@android:color/holo_blue_dark"
+                        app:lineThickness="2dp"
+                        app:useMaxSize="true" />
+                </com.otaliastudios.zoom.ZoomLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_trigger_visibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_margin="@dimen/ui_margin_medium"
+            android:onClick="@{() -> viewModel.onClickFab()}"
+            android:text="@{viewModel.fabStage == 0 ? @string/text_show : @string/text_do_review}"
+            android:visibility="@{viewModel.isFabVisible ? View.VISIBLE : View.GONE}"
+            app:icon="@{viewModel.fabStage == 0 ? @drawable/ic_visibility_24dp : @drawable/ic_done_black_24dp}"
+            tools:icon="@drawable/ic_visibility_24dp"
+            tools:text="@string/text_show" />
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:navigationIcon="?attr/homeAsUpIndicator"
+                app:title="@{viewModel.note.title}" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
