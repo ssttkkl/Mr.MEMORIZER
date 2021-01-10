@@ -3,7 +3,10 @@ package me.ssttkkl.mrmemorizer.data.entity
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.google.gson.Gson
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 import java.time.LocalDate
 import java.time.OffsetDateTime
@@ -24,6 +27,27 @@ data class Note(
     @ColumnInfo(name = "review_interval_days") val reviewIntervalDays: Long = 1,
     @ColumnInfo(name = "next_review_date") val nextReviewDate: LocalDate
 ) : Parcelable {
+
+    @Ignore
+    @IgnoredOnParcel
+    val tree = lazy {
+        if (noteType == NoteType.Map)
+            Gson().fromJson(content, Tree::class.java)
+        else
+            throw error("noteType != NoteType.Map")
+    }
+
+    @Ignore
+    @IgnoredOnParcel
+    private val treeText = lazy {
+        tree.value.toDisplayText()
+    }
+
+    val displayText
+        get() = if (noteType == NoteType.Text)
+            content
+        else
+            treeText.value
 
     // REF: https://en.wikipedia.org/wiki/SuperMemo#Description_of_SM-2_algorithm
     fun sm2(userGrade: Int): Note {

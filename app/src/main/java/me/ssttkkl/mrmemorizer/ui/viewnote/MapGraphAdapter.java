@@ -16,18 +16,16 @@ import de.blox.graphview.Node;
 import me.ssttkkl.mrmemorizer.R;
 
 public class MapGraphAdapter extends GraphAdapter<MapGraphAdapter.SimpleViewHolder> {
-    //private Graph graph;
 
-    public MapGraphAdapter(/*@NotNull Graph graph*/) {
+    public MapGraphAdapter() {
         super(new Graph());
-    //    super(graph);
-    //    this.graph = graph;
     }
 
     @Override
     public void onBindViewHolder(@NotNull SimpleViewHolder simpleViewHolder, @NotNull Object data, int i) {
-        simpleViewHolder.textView.setText((String)((Node)data).getData());
+        simpleViewHolder.textView.setText((String) ((Node) data).getData());
     }
+
     @NonNull
     @NotNull
     @Override
@@ -51,8 +49,9 @@ public class MapGraphAdapter extends GraphAdapter<MapGraphAdapter.SimpleViewHold
         return !getGraph().hasNodes();
     }
 
-    class SimpleViewHolder extends GraphView.ViewHolder {
+    static class SimpleViewHolder extends GraphView.ViewHolder {
         TextView textView;
+
         SimpleViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.text);

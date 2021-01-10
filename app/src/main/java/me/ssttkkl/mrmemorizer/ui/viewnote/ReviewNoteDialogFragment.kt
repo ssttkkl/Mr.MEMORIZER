@@ -31,6 +31,7 @@ class ReviewNoteDialogFragment : DialogFragment() {
     companion object {
         private const val KEY_NOTE_ID = "note_id"
 
+        @JvmStatic
         fun newInstance(noteId: Int) = ReviewNoteDialogFragment().apply {
             arguments = bundleOf(KEY_NOTE_ID to noteId)
         }

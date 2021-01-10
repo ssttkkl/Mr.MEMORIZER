@@ -1,63 +1,96 @@
 package me.ssttkkl.mrmemorizer.data.entity;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import de.blox.graphview.Graph;
 import de.blox.graphview.Node;
 
 public class Tree {
-    private String content;
-    private List<Tree> children = new ArrayList<>();
+    private final String content;
+    private final Collection<Tree> children;
 
-    public Tree(String data){
-        String[] strings = data.split("\n");
-        this.content = strings[0];
-        String child = "";
-        for(int i=1;i<strings.length;i++){
+    public Tree(String content, Collection<Tree> children) {
+        this.content = content;
+        this.children = children;
+    }
+
+    static public Tree parseText(String text) {
+        String[] strings = text.split("\n");
+        String root = strings[0];
+
+        final StringBuilder prevChildText = new StringBuilder();
+        final Collection<Tree> children = new ArrayList<>();
+        for (int i = 1; i < strings.length; i++) {
+            if (strings[i].isEmpty())
+                continue;
             strings[i] = strings[i].substring(1);
-            if (!strings[i].contains("\t")){
-                if(!child.isEmpty()){
-                    children.add(new Tree(child));
+            if (!strings[i].startsWith(" ")) {
+                if (prevChildText.length() != 0) {
+                    children.add(Tree.parseText(prevChildText.toString()));
                 }
-                child = strings[i];
-            }else{
-                child += "\n"+strings[i];
+                prevChildText.delete(0, prevChildText.length());
+            } else {
+                prevChildText.append('\n');
             }
+            prevChildText.append(strings[i]);
         }
-        if(!child.isEmpty()){
-            children.add(new Tree(child));
+
+        if (prevChildText.length() != 0) {
+            children.add(Tree.parseText(prevChildText.toString()));
         }
+
+        return new Tree(root, children);
+    }
+
+    private void appendDisplayText(@NonNull StringBuilder sb, int prefixNum) {
+        for (int i = 0; i < prefixNum; i++)
+            sb.append(' ');
+        sb.append(this.content);
+        sb.append('\n');
+        for (Tree c : children) {
+            c.appendDisplayText(sb, prefixNum + 1);
+        }
+    }
+
+    @NonNull
+    public String toDisplayText() {
+        StringBuilder sb = new StringBuilder();
+        appendDisplayText(sb, 0);
+        sb.deleteCharAt(sb.length() - 1); // 删除最后一行的换行
+        return sb.toString();
     }
 
     public String getContent() {
         return content;
     }
 
-    public List<Tree> getChildren() {
+    public Collection<Tree> getChildren() {
         return children;
     }
 
-    public Graph convertToGraph(){
+    public Graph convertToGraph() {
         Graph graph = new Graph();
         Node parentNode = new Node(getContent());
         graph.addNode(parentNode);
-        for(Tree childTree:getChildren()){
+        for (Tree childTree : getChildren()) {
             Node childNode = new Node(childTree.getContent());
             graph.addNode(childNode);
-            graph.addEdge(parentNode,childNode);
-            addSubTreeToGraph(graph,childNode,childTree);
+            graph.addEdge(parentNode, childNode);
+            addSubTreeToGraph(graph, childNode, childTree);
         }
         return graph;
     }
 
 
-    private void addSubTreeToGraph(Graph graph, Node parentNode, Tree tree){
-        for(Tree childTree:tree.getChildren()){
+    private void addSubTreeToGraph(Graph graph, Node parentNode, Tree tree) {
+        for (Tree childTree : tree.getChildren()) {
             Node childNode = new Node(childTree.getContent());
             graph.addNode(childNode);
-            graph.addEdge(parentNode,childNode);
-            addSubTreeToGraph(graph,childNode,childTree);
+            graph.addEdge(parentNode, childNode);
+            addSubTreeToGraph(graph, childNode, childTree);
         }
     }
 }

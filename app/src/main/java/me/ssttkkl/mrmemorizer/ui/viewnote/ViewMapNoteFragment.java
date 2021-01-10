@@ -1,7 +1,6 @@
 package me.ssttkkl.mrmemorizer.ui.viewnote;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.google.gson.Gson;
+import org.jetbrains.annotations.NotNull;
 
 import de.blox.graphview.GraphAdapter;
 import de.blox.graphview.tree.BuchheimWalkerAlgorithm;
@@ -34,7 +33,7 @@ public class ViewMapNoteFragment extends Fragment {
     private FragmentViewMapNoteBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
         binding = FragmentViewMapNoteBinding.inflate(inflater, container, false);
         binding.setLifecycleOwner(this);
         ViewNoteViewModel viewModel = new ViewModelProvider(this).get(ViewNoteViewModel.class);
@@ -46,7 +45,7 @@ public class ViewMapNoteFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ((AppCompatActivity)getActivity()).setSupportActionBar(binding.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(binding.toolbar);
         setHasOptionsMenu(true);
 
         binding.getViewModel().getNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
@@ -57,8 +56,8 @@ public class ViewMapNoteFragment extends Fragment {
         });
         binding.getViewModel().getShowEditNoteViewEvent().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(Integer integer) {
-                showEditNoteView();
+            public void onChanged(Integer noteId) {
+                showEditNoteView(noteId);
             }
         });
         binding.getViewModel().getFinishEvent().observe(getViewLifecycleOwner(), new Observer<Unit>() {
@@ -69,8 +68,8 @@ public class ViewMapNoteFragment extends Fragment {
         });
         binding.getViewModel().getShowDoReviewViewEvent().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(Integer integer) {
-                showDoReviewView();
+            public void onChanged(Integer noteId) {
+                showDoReviewView(noteId);
             }
         });
 
@@ -85,27 +84,22 @@ public class ViewMapNoteFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case android.R.id.home:
-                finish();
-                break;
-            case R.id.menu_item_remove:
-                binding.getViewModel().onClickRemove();
-                break;
-            case R.id.menu_item_edit:
-                binding.getViewModel().onClickEdit();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+        } else if (itemId == R.id.menu_item_remove) {
+            binding.getViewModel().onClickRemove();
+        } else if (itemId == R.id.menu_item_edit) {
+            binding.getViewModel().onClickEdit();
+        } else {
+            return super.onOptionsItemSelected(item);
         }
         return true;
     }
 
-    private void showGraph(){
-        String data = binding.getViewModel().getNote().getValue().getContent();
-        Gson gson = new Gson();
-        Tree tree = gson.fromJson(data, Tree.class);
+    private void showGraph() {
+        Tree tree = binding.getViewModel().getNote().getValue().getTree().getValue();
         binding.graph.getAdapter().setGraph(tree.convertToGraph());
 
         final BuchheimWalkerConfiguration configuration = new BuchheimWalkerConfiguration.Builder()
@@ -116,16 +110,17 @@ public class ViewMapNoteFragment extends Fragment {
                 .build();
         binding.graph.setLayout(new BuchheimWalkerAlgorithm(configuration));
     }
-    private void showEditNoteView() {
+
+    private void showEditNoteView(int noteId) {
         NavController navController = Navigation.findNavController(getView());
         Bundle bundle = new Bundle();
-        bundle.putString("mode","edit");
-        bundle.putInt("noteId",binding.getViewModel().getNoteId().getValue());
-        navController.navigate(R.id.navigation_edit_note,bundle);
+        bundle.putString("mode", "edit");
+        bundle.putInt("noteId", noteId);
+        navController.navigate(R.id.navigation_edit_note, bundle);
     }
 
-    private void showDoReviewView() {
-        ReviewNoteDialogFragment.Companion.newInstance(binding.getViewModel().getNoteId().getValue()).show(getChildFragmentManager(), null);
+    private void showDoReviewView(int noteId) {
+        ReviewNoteDialogFragment.newInstance(noteId).show(getChildFragmentManager(), null);
     }
 
     private void finish() {

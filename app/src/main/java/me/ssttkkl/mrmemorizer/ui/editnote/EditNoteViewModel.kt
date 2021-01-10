@@ -70,7 +70,7 @@ class EditNoteViewModel : ViewModel() {
 
                 noteType.postValue(origin.noteType)
                 noteTitle.postValue(origin.title)
-                noteContent.postValue(origin.content)
+                noteContent.postValue(origin.displayText)
                 if (origin.categoryId != 0) {
                     val category = db.categoryDao.getCategoryByIdSync(origin.categoryId)
                     noteCategory.postValue(category?.name)
@@ -99,9 +99,11 @@ class EditNoteViewModel : ViewModel() {
                         val note = Note.newNote(
                             noteType = noteType.value!!,
                             title = noteTitle.value ?: "",
-                            content = when(noteType.value){
+                            content = when (noteType.value) {
                                 NoteType.Text -> noteContent.value ?: ""
-                                NoteType.Map -> Gson().toJson(Tree(noteContent.value ?: ""))
+                                NoteType.Map -> Gson().toJson(
+                                    Tree.parseText(noteContent.value ?: "")
+                                )
                                 else -> ""
                             },
 //                            content = noteContent.value ?: "",
