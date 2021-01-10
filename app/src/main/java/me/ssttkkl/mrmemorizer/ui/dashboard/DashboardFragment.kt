@@ -51,9 +51,15 @@ class DashboardFragment : Fragment() {
     }
 
     private fun showViewNoteView(note: Note) {
-        findNavController().navigate(
-            R.id.navigation_view_note,
-            bundleOf("noteId" to note.noteId)
-        )
+        when (note.noteType) {
+            NoteType.Text -> findNavController().navigate(
+                R.id.navigation_view_note,
+                bundleOf("noteId" to note.noteId)
+            )
+            NoteType.Map -> findNavController().navigate(
+                R.id.navigation_view_map_note,
+                bundleOf("noteId" to note.noteId)
+            )
+        }
     }
 }

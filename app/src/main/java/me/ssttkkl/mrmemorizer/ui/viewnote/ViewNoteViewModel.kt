@@ -1,12 +1,12 @@
 package me.ssttkkl.mrmemorizer.ui.viewnote
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import androidx.room.withTransaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import me.ssttkkl.mrmemorizer.MyApp
-import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 import me.ssttkkl.mrmemorizer.ui.utils.getNextReviewTimeText
@@ -18,11 +18,6 @@ class ViewNoteViewModel : ViewModel() {
     val noteId = MutableLiveData(0)
     val note = Transformations.switchMap(noteId) {
         AppDatabase.getInstance().noteDao.getNoteById(it)
-    }.apply {
-        observeForever {
-            fabStage.value = // 当笔记待复习时为0，否则为-1
-                if (it != null && !LocalDate.now().isBefore(it.nextReviewDate)) 0 else -1
-        }
     }
     val category = Transformations.switchMap(note) {
         if (it.categoryId == 0)
@@ -35,18 +30,19 @@ class ViewNoteViewModel : ViewModel() {
         it.getNextReviewTimeText()
     }
 
-    val fabStage = MutableLiveData(-1) // -1：隐藏（笔记未到复习时间）；0: 点击展示笔记；1: 点击按钮完成复习
-    val isFabVisible = fabStage.map { it != -1 }
+    val isDoReviewButtonVisible = Transformations.map(note) {
+        it != null && !LocalDate.now().isBefore(it.nextReviewDate)
+    }
+    val isContentVisible = MutableLiveData<Boolean>(true)
+    val isHideHintVisible = MutableLiveData<Boolean>(false)
 
-    val noteContent = MediatorLiveData<String>().apply {
-        fun updateValue() {
-            value = if (fabStage.value == 0)
-                MyApp.context.getString(R.string.text_note_hided_hint)
-            else
-                note.value?.content ?: ""
+    init {
+        note.observeForever {
+            if (it != null && !LocalDate.now().isBefore(it.nextReviewDate)) { // 当笔记待复习时
+                isContentVisible.value = false
+                isHideHintVisible.value = true
+            }
         }
-        addSource(note) { updateValue() }
-        addSource(fabStage) { updateValue() }
     }
 
     val showEditNoteViewEvent = SingleLiveEvent<Int>()
@@ -61,11 +57,13 @@ class ViewNoteViewModel : ViewModel() {
         }
     }
 
-    fun onClickFab() {
-        if (fabStage.value == 0)
-            fabStage.value = 1
-        else
-            showDoReviewViewEvent.call(noteId.value)
+    fun onClickShow() {
+        isContentVisible.value = true
+        isHideHintVisible.value = false
+    }
+
+    fun onClickDoReview() {
+        showDoReviewViewEvent.call(noteId.value)
     }
 
     fun onClickEdit() {

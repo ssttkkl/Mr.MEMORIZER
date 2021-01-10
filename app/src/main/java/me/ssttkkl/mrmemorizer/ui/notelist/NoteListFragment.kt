@@ -100,7 +100,7 @@ class NoteListFragment : Fragment() {
     }
 
     private fun showViewNoteView(note: Note) {
-        when(note.noteType){
+        when (note.noteType) {
             NoteType.Text -> findNavController().navigate(
                 R.id.navigation_view_note,
                 bundleOf("noteId" to note.noteId)
@@ -110,6 +110,5 @@ class NoteListFragment : Fragment() {
                 bundleOf("noteId" to note.noteId)
             )
         }
-
     }
 }

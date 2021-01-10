@@ -25,7 +25,7 @@ class EditNoteViewModel : ViewModel() {
     private var mode = Mode.New
     private var originNote: Note? = null
 
-    val noteType = MutableLiveData<NoteType>(NoteType.Text)
+    val noteType = MutableLiveData<NoteType>()
     val noteTitle = MutableLiveData<String>("")
     val noteCategory = MutableLiveData<String>("")
     val noteContent = MutableLiveData<String>("")
@@ -116,7 +116,13 @@ class EditNoteViewModel : ViewModel() {
                         GlobalScope.launch(Dispatchers.IO) {
                             val note = origin.copy(
                                 title = noteTitle.value ?: "",
-                                content = noteContent.value ?: "",
+                                content = when (noteType.value) {
+                                    NoteType.Text -> noteContent.value ?: ""
+                                    NoteType.Map -> Gson().toJson(
+                                        Tree.parseText(noteContent.value ?: "")
+                                    )
+                                    else -> ""
+                                },
                                 categoryId = categoryId
                             )
                             db.noteDao.updateNoteSync(note)

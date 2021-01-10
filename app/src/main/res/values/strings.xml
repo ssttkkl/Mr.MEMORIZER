@@ -44,7 +44,7 @@
     <string name="title_add">添加</string>
     <string name="text_show">显示</string>
     <string name="text_hide">隐藏</string>
-    <string name="text_note_hided_hint">笔记已隐藏\n请先尝试回想笔记的内容\n然后点击按钮展示笔记</string>
+    <string name="text_note_hide_hint">笔记已隐藏\n请先尝试回想笔记的内容\n然后点击按钮显示笔记</string>
     <string name="text_review_grade_0">0：完全记不起来</string>
     <string name="text_review_grade_1">1：看过笔记之后稍微有点印象</string>
     <string name="text_review_grade_2">2：看过笔记之后才能记起来</string>
