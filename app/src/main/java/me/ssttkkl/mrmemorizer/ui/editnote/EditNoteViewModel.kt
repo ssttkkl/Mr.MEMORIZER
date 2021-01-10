@@ -46,7 +46,7 @@ class EditNoteViewModel : ViewModel() {
     val previewVisible = noteType.map { it == NoteType.Map }
     val allCategories = AppDatabase.getInstance().categoryDao.getAllCategories()
 
-    val showPreviewViewEvent = SingleLiveEvent<Unit>()
+    val showPreviewViewEvent = SingleLiveEvent<String>()
     val finishEvent = SingleLiveEvent<Unit>()
 
     private var initialized = AtomicBoolean(false)
@@ -135,5 +135,5 @@ class EditNoteViewModel : ViewModel() {
         finishEvent.call()
     }
 
-    fun onClickPreview() = showPreviewViewEvent.call()
+    fun onClickPreview() = showPreviewViewEvent.call(noteContent.value)
 }

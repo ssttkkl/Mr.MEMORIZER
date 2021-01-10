@@ -7,6 +7,7 @@
     <string name="title_new_map_note">新建思维导图</string>
     <string name="title_edit_text_note">编辑文本笔记</string>
     <string name="title_edit_map_note">编辑思维导图</string>
+    <string name="title_preview_map_note">预览思维导图</string>
     <string name="title_save">保存</string>
     <string name="title_abort">放弃</string>
     <string name="title_view_note">查看笔记</string>

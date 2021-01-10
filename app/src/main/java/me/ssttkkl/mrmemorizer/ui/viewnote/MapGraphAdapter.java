@@ -21,6 +21,10 @@ public class MapGraphAdapter extends GraphAdapter<MapGraphAdapter.SimpleViewHold
         super(new Graph());
     }
 
+    public MapGraphAdapter(Graph graph) {
+        super(graph);
+    }
+
     @Override
     public void onBindViewHolder(@NotNull SimpleViewHolder simpleViewHolder, @NotNull Object data, int i) {
         simpleViewHolder.textView.setText((String) ((Node) data).getData());

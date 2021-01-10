@@ -79,5 +79,17 @@
         <argument
             android:name="noteId"
             app:argType="java.lang.Long" />
+        <action
+            android:id="@+id/action_navigation_edit_note_to_navigation_preview_note"
+            app:destination="@id/navigation_preview_note" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_preview_note"
+        android:name="me.ssttkkl.mrmemorizer.ui.editnote.PreviewNoteFragment"
+        tools:layout="@layout/fragment_preview_map_note">
+        <argument
+            android:name="noteContent"
+            app:argType="java.lang.String" />
     </fragment>
 </navigation>

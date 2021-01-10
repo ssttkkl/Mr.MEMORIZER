@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -61,7 +62,7 @@ class EditNoteFragment : Fragment() {
                     notifyDataSetChanged()
                 }
             })
-            showPreviewViewEvent.observe(viewLifecycleOwner, Observer { showPreviewView() })
+            showPreviewViewEvent.observe(viewLifecycleOwner, Observer { showPreviewView(it) })
             finishEvent.observe(viewLifecycleOwner, Observer { finish() })
         }
     }
@@ -85,8 +86,11 @@ class EditNoteFragment : Fragment() {
         return true
     }
 
-    private fun showPreviewView() {
-
+    private fun showPreviewView(it: String) {
+        findNavController().navigate(
+            R.id.navigation_preview_note,
+            bundleOf("noteContent" to it)
+        )
     }
 
     private fun finish() {
