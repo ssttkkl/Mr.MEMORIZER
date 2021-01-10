@@ -25,6 +25,9 @@ public class Tree {
                 child += "\n"+strings[i];
             }
         }
+        if(!child.isEmpty()){
+            children.add(new Tree(child));
+        }
     }
 
     public String getContent() {

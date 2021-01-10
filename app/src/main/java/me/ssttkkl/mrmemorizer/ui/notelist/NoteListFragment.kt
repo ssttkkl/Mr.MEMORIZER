@@ -16,6 +16,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import me.ssttkkl.mrmemorizer.R
 import me.ssttkkl.mrmemorizer.TOP_DEST
 import me.ssttkkl.mrmemorizer.data.entity.Note
+import me.ssttkkl.mrmemorizer.data.entity.NoteType
 import me.ssttkkl.mrmemorizer.databinding.FragmentNoteListBinding
 
 class NoteListFragment : Fragment() {
@@ -99,9 +100,16 @@ class NoteListFragment : Fragment() {
     }
 
     private fun showViewNoteView(note: Note) {
-        findNavController().navigate(
-            R.id.navigation_view_note,
-            bundleOf("noteId" to note.noteId)
-        )
+        when(note.noteType){
+            NoteType.Text -> findNavController().navigate(
+                R.id.navigation_view_note,
+                bundleOf("noteId" to note.noteId)
+            )
+            NoteType.Map -> findNavController().navigate(
+                R.id.navigation_view_map_note,
+                bundleOf("noteId" to note.noteId)
+            )
+        }
+
     }
 }

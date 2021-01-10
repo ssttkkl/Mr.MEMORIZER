@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.room.withTransaction
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -13,6 +14,7 @@ import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.data.entity.Category
 import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.data.entity.NoteType
+import me.ssttkkl.mrmemorizer.data.entity.Tree
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -97,7 +99,12 @@ class EditNoteViewModel : ViewModel() {
                         val note = Note.newNote(
                             noteType = noteType.value!!,
                             title = noteTitle.value ?: "",
-                            content = noteContent.value ?: "",
+                            content = when(noteType.value){
+                                NoteType.Text -> noteContent.value ?: ""
+                                NoteType.Map -> Gson().toJson(Tree(noteContent.value ?: ""))
+                                else -> ""
+                            },
+//                            content = noteContent.value ?: "",
                             categoryId = categoryId
                         )
                         db.noteDao.insertNoteSync(note)

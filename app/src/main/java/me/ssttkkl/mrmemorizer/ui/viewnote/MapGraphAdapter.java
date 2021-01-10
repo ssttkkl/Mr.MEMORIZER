@@ -12,19 +12,21 @@ import org.jetbrains.annotations.NotNull;
 import de.blox.graphview.Graph;
 import de.blox.graphview.GraphAdapter;
 import de.blox.graphview.GraphView;
+import de.blox.graphview.Node;
 import me.ssttkkl.mrmemorizer.R;
 
 public class MapGraphAdapter extends GraphAdapter<MapGraphAdapter.SimpleViewHolder> {
-    private Graph graph;
+    //private Graph graph;
 
-    public MapGraphAdapter(@NotNull Graph graph) {
-        super(graph);
-        this.graph = graph;
+    public MapGraphAdapter(/*@NotNull Graph graph*/) {
+        super(new Graph());
+    //    super(graph);
+    //    this.graph = graph;
     }
 
     @Override
     public void onBindViewHolder(@NotNull SimpleViewHolder simpleViewHolder, @NotNull Object data, int i) {
-        simpleViewHolder.textView.setText(data.toString());
+        simpleViewHolder.textView.setText((String)((Node)data).getData());
     }
     @NonNull
     @NotNull
@@ -36,17 +38,17 @@ public class MapGraphAdapter extends GraphAdapter<MapGraphAdapter.SimpleViewHold
 
     @Override
     public int getCount() {
-        return graph.getNodeCount();
+        return getGraph().getNodeCount();
     }
 
     @Override
     public Object getItem(int i) {
-        return graph.getNodeAtPosition(i);
+        return getGraph().getNodeAtPosition(i);
     }
 
     @Override
     public boolean isEmpty() {
-        return !graph.hasNodes();
+        return !getGraph().hasNodes();
     }
 
     class SimpleViewHolder extends GraphView.ViewHolder {

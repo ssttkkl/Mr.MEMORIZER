@@ -1,6 +1,7 @@
 package me.ssttkkl.mrmemorizer.ui.viewnote;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,42 +25,23 @@ import de.blox.graphview.tree.BuchheimWalkerAlgorithm;
 import de.blox.graphview.tree.BuchheimWalkerConfiguration;
 import kotlin.Unit;
 import me.ssttkkl.mrmemorizer.R;
+import me.ssttkkl.mrmemorizer.data.entity.Note;
 import me.ssttkkl.mrmemorizer.data.entity.Tree;
 import me.ssttkkl.mrmemorizer.databinding.FragmentViewMapNoteBinding;
 
 public class ViewMapNoteFragment extends Fragment {
-
+    private static final String TAG = "ViewMapNoteFragment";
     private FragmentViewMapNoteBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         binding = FragmentViewMapNoteBinding.inflate(inflater, container, false);
         binding.setLifecycleOwner(this);
-        ViewNoteViewModel viewModel = new ViewModelProvider(getActivity()).get(ViewNoteViewModel.class);
+        ViewNoteViewModel viewModel = new ViewModelProvider(this).get(ViewNoteViewModel.class);
         viewModel.initialize(requireArguments().getInt("noteId"));
         binding.setViewModel(viewModel);
 
-        initView();
-
         return binding.getRoot();
-    }
-
-    private void initView() {
-        String s = binding.getViewModel().getNote().getValue().getContent();
-        Gson gson = new Gson();
-        Tree tree = gson.fromJson(s, Tree.class);
-        GraphAdapter adapter = new MapGraphAdapter(tree.convertToGraph());
-//        String test = "aaa\n\tbbb\n\tccc\n\tddd\n\t\teee";
-//        GraphAdapter adapter = new MapGraphAdapter(new Tree(test).convertToGraph());
-        binding.graph.setAdapter(adapter);
-
-        final BuchheimWalkerConfiguration configuration = new BuchheimWalkerConfiguration.Builder()
-                .setSiblingSeparation(100)
-                .setLevelSeparation(300)
-                .setSubtreeSeparation(300)
-                .setOrientation(BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM)
-                .build();
-        binding.graph.setLayout(new BuchheimWalkerAlgorithm(configuration));
     }
 
     @Override
@@ -67,6 +49,12 @@ public class ViewMapNoteFragment extends Fragment {
         ((AppCompatActivity)getActivity()).setSupportActionBar(binding.toolbar);
         setHasOptionsMenu(true);
 
+        binding.getViewModel().getNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
+            @Override
+            public void onChanged(Note note) {
+                showGraph();
+            }
+        });
         binding.getViewModel().getShowEditNoteViewEvent().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
@@ -82,9 +70,12 @@ public class ViewMapNoteFragment extends Fragment {
         binding.getViewModel().getShowDoReviewViewEvent().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                showEditNoteView();
+                showDoReviewView();
             }
         });
+
+        GraphAdapter adapter = new MapGraphAdapter();
+        binding.graph.setAdapter(adapter);
     }
 
     @Override
@@ -111,6 +102,20 @@ public class ViewMapNoteFragment extends Fragment {
         return true;
     }
 
+    private void showGraph(){
+        String data = binding.getViewModel().getNote().getValue().getContent();
+        Gson gson = new Gson();
+        Tree tree = gson.fromJson(data, Tree.class);
+        binding.graph.getAdapter().setGraph(tree.convertToGraph());
+
+        final BuchheimWalkerConfiguration configuration = new BuchheimWalkerConfiguration.Builder()
+                .setSiblingSeparation(100)
+                .setLevelSeparation(300)
+                .setSubtreeSeparation(300)
+                .setOrientation(BuchheimWalkerConfiguration.ORIENTATION_LEFT_RIGHT)
+                .build();
+        binding.graph.setLayout(new BuchheimWalkerAlgorithm(configuration));
+    }
     private void showEditNoteView() {
         NavController navController = Navigation.findNavController(getView());
         Bundle bundle = new Bundle();
@@ -119,8 +124,8 @@ public class ViewMapNoteFragment extends Fragment {
         navController.navigate(R.id.navigation_edit_note,bundle);
     }
 
-    private void showDoReviewView(int noteId) {
-        ReviewNoteDialogFragment.Companion.newInstance(noteId).show(getChildFragmentManager(), null);
+    private void showDoReviewView() {
+        ReviewNoteDialogFragment.Companion.newInstance(binding.getViewModel().getNoteId().getValue()).show(getChildFragmentManager(), null);
     }
 
     private void finish() {

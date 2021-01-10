@@ -14,6 +14,9 @@
             android:id="@+id/action_navigation_dashboard_to_navigation_view_note"
             app:destination="@id/navigation_view_note" />
         <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_view_map_note"
+            app:destination="@id/navigation_view_map_note" />
+        <action
             android:id="@+id/action_navigation_dashboard_to_navigation_edit_note"
             app:destination="@id/navigation_edit_note" />
     </fragment>
@@ -26,6 +29,9 @@
         <action
             android:id="@+id/action_navigation_note_list_to_navigation_view_note"
             app:destination="@id/navigation_view_note" />
+        <action
+            android:id="@+id/action_navigation_note_list_to_navigation_view_map_note"
+            app:destination="@id/navigation_view_map_note" />
     </fragment>
 
     <fragment
@@ -44,6 +50,19 @@
             app:argType="java.lang.Integer" />
         <action
             android:id="@+id/action_navigation_view_note_to_navigation_edit_note"
+            app:destination="@id/navigation_edit_note" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_view_map_note"
+        android:name="me.ssttkkl.mrmemorizer.ui.viewnote.ViewMapNoteFragment"
+        android:label="@string/title_view_note"
+        tools:layout="@layout/fragment_view_map_note">
+        <argument
+            android:name="noteId"
+            app:argType="java.lang.Integer" />
+        <action
+            android:id="@+id/action_navigation_view_map_note_to_navigation_edit_note"
             app:destination="@id/navigation_edit_note" />
     </fragment>
 
