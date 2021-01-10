@@ -45,6 +45,7 @@ class EditNoteViewModel : ViewModel() {
     }
     val previewVisible = noteType.map { it == NoteType.Map }
     val allCategories = AppDatabase.getInstance().categoryDao.getAllCategories()
+    val noteTitleError = MutableLiveData<String>()
 
     val showPreviewViewEvent = SingleLiveEvent<String>()
     val finishEvent = SingleLiveEvent<Unit>()
@@ -80,6 +81,13 @@ class EditNoteViewModel : ViewModel() {
     }
 
     fun onClickSave() {
+        if (noteTitle.value.isNullOrEmpty()) {
+            noteTitleError.value = MyApp.context.getString(R.string.text_no_title_error)
+            return
+        } else {
+            noteTitleError.value = null
+        }
+
         GlobalScope.launch(Dispatchers.IO) {
             val db = AppDatabase.getInstance()
             db.withTransaction {

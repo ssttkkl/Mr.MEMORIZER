@@ -35,6 +35,9 @@ class EditNoteFragment : Fragment() {
                 MODE_NEW -> initializeForNewNote(requireArguments().getParcelable(KEY_NOTE_TYPE)!!)
                 MODE_EDIT -> initializeForEditNote(requireArguments().getInt(KEY_NOTE_ID))
             }
+            noteTitleError.observe(
+                viewLifecycleOwner,
+                Observer { binding.textInputTitle.error = it })
         }
         return binding.root
     }
