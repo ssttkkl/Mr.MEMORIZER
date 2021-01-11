@@ -5,6 +5,8 @@ import androidx.paging.DataSource
 import androidx.room.*
 import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.data.entity.NoteType
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Dao
 interface NoteDao {
@@ -92,4 +94,18 @@ interface NoteDao {
 
     @Query("SELECT COUNT(note_id) FROM note WHERE next_review_date = :epochDay")
     fun countNotesNextReviewDateEqSync(epochDay: Long): Long
+
+    @Query("SELECT COUNT(note_id) FROM note")
+    fun countNotes(): LiveData<Long>
+
+    @Query("SELECT COUNT(note_id) FROM note WHERE create_time BETWEEN :startTime AND :endTime")
+    fun countNotesCreatedDuring(startTime: Long, endTime: Long): LiveData<Long>
+
+    fun countNotesCreatedToday(): LiveData<Long> {
+        val today = LocalDate.now()
+        return countNotesCreatedDuring(
+            today.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+            today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        )
+    }
 }

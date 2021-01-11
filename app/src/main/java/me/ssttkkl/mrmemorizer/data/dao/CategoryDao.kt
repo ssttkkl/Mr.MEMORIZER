@@ -21,6 +21,9 @@ interface CategoryDao {
     @Query("SELECT * FROM category")
     fun getAllCategories(): LiveData<List<Category>>
 
+    @Query("SELECT COUNT(category_id) FROM category")
+    fun countCategory(): LiveData<Long>
+
     @Query("SELECT COUNT(category_id) FROM note WHERE category_id IN (:categoryId)")
     fun countNotesWithCategorySync(vararg categoryId: Int): Int
 

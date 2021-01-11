@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import me.ssttkkl.mrmemorizer.AppPreferences
 import me.ssttkkl.mrmemorizer.data.AppDatabase
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
+import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ReviewNoteViewModel : ViewModel() {
@@ -27,6 +30,9 @@ class ReviewNoteViewModel : ViewModel() {
         GlobalScope.launch(Dispatchers.IO) {
             val origin = AppDatabase.getInstance().noteDao
                 .getNoteByIdSync(noteId.value!!) ?: return@launch
+            withContext(Dispatchers.Main) {
+                AppPreferences.incReviewTime(origin.nextReviewDate.isEqual(LocalDate.now()))
+            }
             val note = origin.sm2(userGrade)
             AppDatabase.getInstance().noteDao.updateNoteSync(note)
         }
