@@ -2,6 +2,9 @@ package me.ssttkkl.mrmemorizer
 
 import android.util.Log
 import androidx.preference.PreferenceManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.ssttkkl.mrmemorizer.ui.utils.LiveToday
 import java.time.LocalDate
 
@@ -26,10 +29,12 @@ object AppPreferences {
         }
 
     init {
-        LiveToday.observeForever {
-            if (!statisticsUpdatedDate.isEqual(it)) {
-                todayReviewTimes = 0
-                todayPunctuallyReviewTimes = 0
+        GlobalScope.launch(Dispatchers.Main) {
+            LiveToday.observeForever {
+                if (!statisticsUpdatedDate.isEqual(it)) {
+                    todayReviewTimes = 0
+                    todayPunctuallyReviewTimes = 0
+                }
             }
         }
     }

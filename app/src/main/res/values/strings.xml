@@ -53,4 +53,11 @@
     <string name="text_review_grade_4">4：稍微思考了一会儿就能记起来</string>
     <string name="text_review_grade_5">5：完全可以记起来</string>
     <string name="text_review_note_hint">请选择你在回忆这篇笔记时最符合的选项：</string>
+    <string name="text_today_review_counts">今日复习次数</string>
+    <string name="text_total_review_counts">累计复习次数</string>
+    <string name="text_today_note_counts">今日记忆条数</string>
+    <string name="text_total_note_counts">累计记忆条数</string>
+    <string name="text_today_punctually_reviewTimes">今日复习实时完成率</string>
+    <string name="text_total_punctually_reviewTimes">总复习实时完成率</string>
+    <string name="text_category_counts">类别个数</string>
 </resources>

@@ -6,4 +6,6 @@
 
     <dimen name="list_header_and_footer_height">8dp</dimen>
     <dimen name="ui_margin_medium">16dp</dimen>
+    <dimen name="statistics_title_text_size">16dp</dimen>
+    <dimen name="statistics_data_text_size">20dp</dimen>
 </resources>
