@@ -20,6 +20,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navView: BottomNavigationView
     private lateinit var navController: NavController
 
+    // 如果不保存会被GC清理掉
+    private lateinit var onDailyNoticeConfigChangeListener: AppPreferences.OnDailyNoticeConfigChangeListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,5 +40,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         SetupAlarmService.startSetupAlarm(this)
+        onDailyNoticeConfigChangeListener = AppPreferences.OnDailyNoticeConfigChangeListener {
+            SetupAlarmService.startSetupAlarm(this)
+        }.also {
+            AppPreferences.registerOnDailyNoticeConfigChangeListener(it)
+        }
     }
 }

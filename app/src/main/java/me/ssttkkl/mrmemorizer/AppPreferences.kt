@@ -1,5 +1,6 @@
 package me.ssttkkl.mrmemorizer
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.Dispatchers
@@ -7,6 +8,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.ssttkkl.mrmemorizer.ui.utils.LiveToday
 import java.time.LocalDate
+import java.time.LocalTime
 
 object AppPreferences {
 
@@ -87,5 +89,35 @@ object AppPreferences {
         Log.d("AppPreferences", "totalReviewTimes: $totalReviewTimes")
         Log.d("AppPreferences", "todayPunctuallyReviewTimes: $todayPunctuallyReviewTimes")
         Log.d("AppPreferences", "totalPunctuallyReviewTimes: $totalPunctuallyReviewTimes")
+    }
+
+    const val KEY_DAILY_NOTICE_ENABLED = "daily_notice_enabled"
+    const val KEY_DAILY_NOTICE_TIME = "daily_notice_time"
+
+    var dailyNoticeEnabled: Boolean
+        get() = pref.getBoolean(KEY_DAILY_NOTICE_ENABLED, true)
+        set(value) {
+            pref.edit()
+                .putBoolean(KEY_DAILY_NOTICE_ENABLED, value)
+                .apply()
+        }
+
+    var dailyNoticeTime: LocalTime
+        get() = LocalTime.ofSecondOfDay(pref.getInt(KEY_DAILY_NOTICE_TIME, 3600 * 20).toLong())
+        set(value) {
+            pref.edit()
+                .putInt(KEY_DAILY_NOTICE_TIME, value.toSecondOfDay())
+                .apply()
+        }
+
+    class OnDailyNoticeConfigChangeListener(val callback: () -> Unit) {
+        internal val prefListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == KEY_DAILY_NOTICE_ENABLED || key == KEY_DAILY_NOTICE_TIME)
+                callback.invoke()
+        }
+    }
+
+    fun registerOnDailyNoticeConfigChangeListener(listener: OnDailyNoticeConfigChangeListener) {
+        pref.registerOnSharedPreferenceChangeListener(listener.prefListener)
     }
 }

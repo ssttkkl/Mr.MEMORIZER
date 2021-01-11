@@ -60,4 +60,7 @@
     <string name="text_today_punctually_reviewTimes">今日复习实时完成率</string>
     <string name="text_total_punctually_reviewTimes">总复习实时完成率</string>
     <string name="text_category_counts">类别个数</string>
+    <string name="settings_category_daily_notice">每日复习提醒</string>
+    <string name="settings_title_daily_notice_enabled">开启每日复习提醒</string>
+    <string name="settings_title_daily_notice_time">提醒时间</string>
 </resources>

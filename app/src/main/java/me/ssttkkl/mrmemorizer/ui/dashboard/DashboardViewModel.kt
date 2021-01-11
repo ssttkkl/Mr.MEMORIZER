@@ -23,8 +23,10 @@ class DashboardViewModel : ViewModel() {
 
     val showNewNoteViewEvent = SingleLiveEvent<NoteType>()
     val showViewNoteViewEvent = SingleLiveEvent<Note>()
+    val showSettingsViewEvent = SingleLiveEvent<Unit>()
 
     fun onClickNewTextNote() = showNewNoteViewEvent.call(NoteType.Text)
     fun onClickNewMapNote() = showNewNoteViewEvent.call(NoteType.Map)
     fun onClickNote(note: Note) = showViewNoteViewEvent.call(note)
+    fun onClickSettings() = showSettingsViewEvent.call()
 }
