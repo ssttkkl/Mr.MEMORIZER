@@ -17,8 +17,6 @@ class DashboardViewModel : ViewModel() {
             .toLiveData(pageSize = 50)
     }
 
-    val notesTodayReviewCount = notesTodayReview.map { it.size.toString() }
-
     val emptyHintVisible = notesTodayReview.map { it.isEmpty() }
 
     val showNewNoteViewEvent = SingleLiveEvent<NoteType>()

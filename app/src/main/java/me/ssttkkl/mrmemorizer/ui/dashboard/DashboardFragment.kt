@@ -1,9 +1,8 @@
 package me.ssttkkl.mrmemorizer.ui.dashboard
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,6 +29,10 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.toolbar.let {
+            (activity as AppCompatActivity).setSupportActionBar(it)
+            setHasOptionsMenu(true)
+        }
         binding.listReadyToReview.apply {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = NoteRecyclerViewAdapter(viewLifecycleOwner, binding.viewModel!!)
@@ -39,6 +42,19 @@ class DashboardFragment : Fragment() {
             showViewNoteViewEvent.observe(viewLifecycleOwner, Observer { showViewNoteView(it) })
             showSettingsViewEvent.observe(viewLifecycleOwner, Observer { showSettingsView() })
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.menu_dashboard, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.settings -> binding.viewModel?.onClickSettings()
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     private fun showNewNoteView(type: NoteType) {

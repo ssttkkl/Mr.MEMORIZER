@@ -53,7 +53,10 @@ class NoteListViewModel : ViewModel() {
 
     fun getNoteNextReviewTimeText(note: Note?) = note.getNextReviewTimeText()
 
+    val showNewNoteViewEvent = SingleLiveEvent<NoteType>()
     val showViewNoteViewEvent = SingleLiveEvent<Note>()
 
     fun onClickNote(note: Note) = showViewNoteViewEvent.call(note)
+    fun onClickNewTextNote() = showNewNoteViewEvent.call(NoteType.Text)
+    fun onClickNewMapNote() = showNewNoteViewEvent.call(NoteType.Map)
 }

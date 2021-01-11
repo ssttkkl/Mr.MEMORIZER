@@ -13,140 +13,114 @@
             type="me.ssttkkl.mrmemorizer.ui.dashboard.DashboardViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/ui_margin_medium"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{() -> viewModel.onClickSettings()}"
-            android:src="@drawable/ic_settings_24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView_readyToReview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/text_readyToReview"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:title="@string/text_readyToReview" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@{viewModel.notesTodayReviewCount}"
-            app:layout_constraintBottom_toBottomOf="@+id/textView_readyToReview"
-            app:layout_constraintStart_toEndOf="@id/textView_readyToReview"
-            app:layout_constraintTop_toTopOf="@id/textView_readyToReview"
-            tools:text="0项" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_readyToReview"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_dashboard_note_ready_to_review" />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_readyToReview">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:gravity="top|center_horizontal"
+                android:padding="16dp"
+                android:text="@string/text_no_note_ready_to_review"
+                android:visibility="@{viewModel.emptyHintVisible ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-            <FrameLayout
-                android:id="@+id/frameLayout_readyToReview"
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.nambimobile.widgets.efab.ExpandableFabLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- The next 3 Views will only display in portrait orientation -->
+            <com.nambimobile.widgets.efab.Overlay
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                app:overlay_orientation="portrait" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/list_readyToReview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="8dp"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/item_dashboard_note_ready_to_review" />
+            <com.nambimobile.widgets.efab.ExpandableFab
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="@dimen/ui_margin_medium"
+                android:layout_marginBottom="@dimen/ui_margin_medium"
+                app:efab_orientation="portrait" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_margin="16dp"
-                    android:gravity="top|center_horizontal"
-                    android:text="@string/text_no_note_ready_to_review"
-                    android:visibility="@{viewModel.emptyHintVisible ? View.VISIBLE : View.GONE}" />
+            <com.nambimobile.widgets.efab.FabOption
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onClickNewTextNote()}"
+                app:fab_icon="@drawable/ic_baseline_text_snippet_24"
+                app:fab_orientation="portrait"
+                app:label_text="@string/title_new_text_note" />
 
-            </FrameLayout>
+            <com.nambimobile.widgets.efab.FabOption
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onClickNewMapNote()}"
+                app:fab_icon="@drawable/ic_baseline_map_24"
+                app:fab_orientation="portrait"
+                app:label_text="@string/title_new_map_note" />
 
-            <com.nambimobile.widgets.efab.ExpandableFabLayout
+            <!-- The next 3 Views will only display in landscape orientation -->
+            <com.nambimobile.widgets.efab.Overlay
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                app:overlay_orientation="landscape" />
 
-                <!-- The next 3 Views will only display in portrait orientation -->
-                <com.nambimobile.widgets.efab.Overlay
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:overlay_orientation="portrait" />
+            <com.nambimobile.widgets.efab.ExpandableFab
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="@dimen/ui_margin_medium"
+                android:layout_marginBottom="@dimen/ui_margin_medium"
+                app:efab_orientation="landscape" />
 
-                <com.nambimobile.widgets.efab.ExpandableFab
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_marginEnd="@dimen/ui_margin_medium"
-                    android:layout_marginBottom="@dimen/ui_margin_medium"
-                    app:efab_orientation="portrait" />
+            <com.nambimobile.widgets.efab.FabOption
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onClickNewTextNote()}"
+                app:fab_icon="@drawable/ic_baseline_text_snippet_24"
+                app:fab_orientation="landscape"
+                app:label_text="@string/title_new_text_note" />
 
-                <com.nambimobile.widgets.efab.FabOption
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.onClickNewTextNote()}"
-                    app:fab_icon="@drawable/ic_baseline_text_snippet_24"
-                    app:fab_orientation="portrait"
-                    app:label_text="@string/title_new_text_note" />
+            <com.nambimobile.widgets.efab.FabOption
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onClickNewMapNote()}"
+                app:fab_icon="@drawable/ic_baseline_map_24"
+                app:fab_orientation="landscape"
+                app:label_text="@string/title_new_map_note" />
 
-                <com.nambimobile.widgets.efab.FabOption
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.onClickNewMapNote()}"
-                    app:fab_icon="@drawable/ic_baseline_map_24"
-                    app:fab_orientation="portrait"
-                    app:label_text="@string/title_new_map_note" />
+        </com.nambimobile.widgets.efab.ExpandableFabLayout>
 
-                <!-- The next 3 Views will only display in landscape orientation -->
-                <com.nambimobile.widgets.efab.Overlay
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:overlay_orientation="landscape" />
-
-                <com.nambimobile.widgets.efab.ExpandableFab
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_marginEnd="@dimen/ui_margin_medium"
-                    android:layout_marginBottom="@dimen/ui_margin_medium"
-                    app:efab_orientation="landscape" />
-
-                <com.nambimobile.widgets.efab.FabOption
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.onClickNewTextNote()}"
-                    app:fab_icon="@drawable/ic_baseline_text_snippet_24"
-                    app:fab_orientation="landscape"
-                    app:label_text="@string/title_new_text_note" />
-
-                <com.nambimobile.widgets.efab.FabOption
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.onClickNewMapNote()}"
-                    app:fab_icon="@drawable/ic_baseline_map_24"
-                    app:fab_orientation="landscape"
-                    app:label_text="@string/title_new_map_note" />
-
-            </com.nambimobile.widgets.efab.ExpandableFabLayout>
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>

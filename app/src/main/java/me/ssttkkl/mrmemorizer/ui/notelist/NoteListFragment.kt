@@ -10,11 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import me.ssttkkl.mrmemorizer.R
-import me.ssttkkl.mrmemorizer.TOP_DEST
 import me.ssttkkl.mrmemorizer.data.entity.Note
 import me.ssttkkl.mrmemorizer.data.entity.NoteType
 import me.ssttkkl.mrmemorizer.databinding.FragmentNoteListBinding
@@ -40,7 +37,7 @@ class NoteListFragment : Fragment() {
 
         binding.toolbar.apply {
             (activity as? AppCompatActivity)?.setSupportActionBar(this)
-            setupWithNavController(findNavController(), AppBarConfiguration(TOP_DEST))
+            setHasOptionsMenu(true)
         }
 
         binding.spinnerCategory.apply {
@@ -75,9 +72,8 @@ class NoteListFragment : Fragment() {
                     notifyDataSetChanged()
                 }
             })
-            showViewNoteViewEvent.observe(viewLifecycleOwner, Observer {
-                showViewNoteView(it)
-            })
+            showNewNoteViewEvent.observe(viewLifecycleOwner, Observer { showNewNoteView(it) })
+            showViewNoteViewEvent.observe(viewLifecycleOwner, Observer { showViewNoteView(it) })
         }
     }
 
@@ -97,6 +93,16 @@ class NoteListFragment : Fragment() {
                 }
             })
         }
+    }
+
+    private fun showNewNoteView(type: NoteType) {
+        findNavController().navigate(
+            R.id.navigation_edit_note,
+            bundleOf(
+                "mode" to "new",
+                "noteType" to type
+            )
+        )
     }
 
     private fun showViewNoteView(note: Note) {
