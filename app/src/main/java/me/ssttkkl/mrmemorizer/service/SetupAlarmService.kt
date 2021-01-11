@@ -9,6 +9,7 @@ import me.ssttkkl.mrmemorizer.AppPreferences
 import me.ssttkkl.mrmemorizer.R
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class SetupAlarmService : IntentService("NotifyService") {
 
@@ -23,7 +24,12 @@ class SetupAlarmService : IntentService("NotifyService") {
             )
             val millis = AppPreferences.dailyNoticeTime
                 .atDate(LocalDate.now())
-                .atZone(ZoneId.systemDefault())
+                .atZone(ZoneId.systemDefault()).let {
+                    if (it.isAfter(ZonedDateTime.now()))
+                        it
+                    else
+                        it.plusDays(1)
+                }
                 .toInstant()
                 .toEpochMilli()
             alarmManager.setRepeating(
