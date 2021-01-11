@@ -179,7 +179,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="60dp"
                         android:layout_marginBottom="16dp"
-                        android:text="@{viewModel.todayPunctuallyReviewTimes}"
+                        android:text="@{viewModel.todayPunctuallyReviewRate}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textSize="@dimen/statistics_data_text_size"
                         tools:text="5" />
@@ -209,7 +209,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="60dp"
                         android:layout_marginBottom="16dp"
-                        android:text="@{viewModel.totalPunctuallyReviewTimes}"
+                        android:text="@{viewModel.totalPunctuallyReviewRate}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textSize="@dimen/statistics_data_text_size"
                         tools:text="5" />

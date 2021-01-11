@@ -32,10 +32,9 @@ class SetupAlarmService : IntentService("NotifyService") {
                 }
                 .toInstant()
                 .toEpochMilli()
-            alarmManager.setRepeating(
+            alarmManager.set(
                 AlarmManager.RTC_WAKEUP,
                 millis,
-                AlarmManager.INTERVAL_DAY,
                 pIntent
             )
             Log.d(
