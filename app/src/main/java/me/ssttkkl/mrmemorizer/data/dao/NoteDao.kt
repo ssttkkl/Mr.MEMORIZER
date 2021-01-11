@@ -104,8 +104,8 @@ interface NoteDao {
     fun countNotesCreatedToday(): LiveData<Long> {
         val today = LocalDate.now()
         return countNotesCreatedDuring(
-            today.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli(),
-            today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+            today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond(),
+            today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
         )
     }
 }
