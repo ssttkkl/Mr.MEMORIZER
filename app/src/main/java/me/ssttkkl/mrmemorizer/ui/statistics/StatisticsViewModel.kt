@@ -22,11 +22,15 @@ class StatisticsViewModel : ViewModel() {
         it.toString()
     }
 
-    var todayPunctuallyReviewRate =
-        (AppPreferences.todayPunctuallyReviewTimes / AppPreferences.todayReviewTimes).toString()
+    var todayPunctuallyReviewRate = if (AppPreferences.todayReviewTimes == 0L)
+        "-"
+    else
+        "%.2f%%".format(100.0 * AppPreferences.todayPunctuallyReviewTimes / AppPreferences.todayReviewTimes)
 
-    var totalPunctuallyReviewRate =
-        (AppPreferences.totalPunctuallyReviewTimes / AppPreferences.totalReviewTimes).toString()
+    var totalPunctuallyReviewRate = if (AppPreferences.totalReviewTimes == 0L)
+        "-"
+    else
+        "%.2f%%".format(100.0 * AppPreferences.totalPunctuallyReviewTimes / AppPreferences.totalReviewTimes)
 
     var categoryCounts = AppDatabase.getInstance().categoryDao.countCategory().map {
         it.toString()

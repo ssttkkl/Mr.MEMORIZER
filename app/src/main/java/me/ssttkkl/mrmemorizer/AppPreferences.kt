@@ -34,6 +34,7 @@ object AppPreferences {
         GlobalScope.launch(Dispatchers.Main) {
             LiveToday.observeForever {
                 if (!statisticsUpdatedDate.isEqual(it)) {
+                    statisticsUpdatedDate = LocalDate.now()
                     todayReviewTimes = 0
                     todayPunctuallyReviewTimes = 0
                 }
@@ -73,7 +74,7 @@ object AppPreferences {
         get() = pref.getLong(KEY_TOTAL_PUNCTUALLY_REVIEW_TIMES, 0)
         private set(value) {
             pref.edit()
-                .putLong(KEY_TODAY_PUNCTUALLY_REVIEW_TIMES, value)
+                .putLong(KEY_TOTAL_PUNCTUALLY_REVIEW_TIMES, value)
                 .apply()
         }
 
