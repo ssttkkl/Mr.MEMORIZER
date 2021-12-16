@@ -12,96 +12,112 @@
             type="me.ssttkkl.mrmemorizer.ui.viewnote.ViewNoteViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="0dp"
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="@{viewModel.note.title}" />
+            android:background="?android:attr/windowBackground">
 
-        <TextView
-            android:id="@+id/textView_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@{viewModel.category != null ? viewModel.category.name : @string/text_uncategorized}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            tools:text="@string/text_uncategorized" />
-
-        <TextView
-            android:id="@+id/textView_reviewProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@{@string/text_next_review_time + viewModel.nextReviewTimeText}"
-            app:layout_constraintStart_toEndOf="@id/textView_category"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            tools:text="下一次复习：5天后" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/cardview_light_background"
-            android:visibility="@{viewModel.isHideHintVisible ? View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_reviewProgress">
-
-            <LinearLayout
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:navigationIcon="?attr/homeAsUpIndicator"
+                app:title="@{viewModel.note.title}" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/ui_margin_medium"
-                    android:layout_weight="1"
-                    android:text="@string/text_note_hide_hint" />
-
-                <Button
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:id="@+id/textView_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/ui_margin_medium"
-                    android:onClick="@{() -> viewModel.onClickShow()}"
-                    android:text="@string/text_show" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{viewModel.category != null ? viewModel.category.name : @string/text_uncategorized}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/text_uncategorized" />
 
-        <com.otaliastudios.zoom.ZoomLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/ui_margin_medium"
-            android:visibility="@{viewModel.isContentVisible ? View.VISIBLE : View.GONE}"
-            app:hasClickableChildren="true"
-            app:layout_constraintBottom_toTopOf="@+id/fab"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card">
+                <TextView
+                    android:id="@+id/textView_reviewProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{@string/text_next_review_time + viewModel.nextReviewTimeText}"
+                    app:layout_constraintStart_toEndOf="@id/textView_category"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="下一次复习：5天后" />
 
-            <de.blox.graphview.GraphView
-                android:id="@+id/graph"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:lineColor="@android:color/holo_blue_dark"
-                app:lineThickness="2dp"
-                app:useMaxSize="true" />
-        </com.otaliastudios.zoom.ZoomLayout>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@color/cardview_light_background"
+                    android:visibility="@{viewModel.isHideHintVisible ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView_reviewProgress">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/ui_margin_medium"
+                            android:layout_weight="1"
+                            android:text="@string/text_note_hide_hint" />
+
+                        <Button
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/ui_margin_medium"
+                            android:onClick="@{() -> viewModel.onClickShow()}"
+                            android:text="@string/text_show" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <com.otaliastudios.zoom.ZoomLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/ui_margin_medium"
+                    android:visibility="@{viewModel.isContentVisible ? View.VISIBLE : View.GONE}"
+                    app:hasClickableChildren="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/card">
+
+                    <de.blox.graphview.GraphView
+                        android:id="@+id/graph"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:lineColor="@android:color/holo_blue_dark"
+                        app:lineThickness="2dp"
+                        app:useMaxSize="true" />
+                </com.otaliastudios.zoom.ZoomLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab"
@@ -112,9 +128,7 @@
             android:onClick="@{() -> viewModel.onClickDoReview()}"
             android:text="@string/text_do_review"
             android:visibility="@{viewModel.isDoReviewButtonVisible ? View.VISIBLE : View.GONE}"
-            app:icon="@drawable/ic_done_black_24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+            app:icon="@drawable/ic_done_black_24dp" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
