@@ -61,7 +61,8 @@
 
         <com.nambimobile.widgets.efab.ExpandableFabLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior">
 
             <!-- The next 3 Views will only display in portrait orientation -->
             <com.nambimobile.widgets.efab.Overlay
