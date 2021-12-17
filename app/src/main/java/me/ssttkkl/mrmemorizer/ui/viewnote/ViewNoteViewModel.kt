@@ -8,6 +8,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.ssttkkl.mrmemorizer.data.AppDatabase
+import me.ssttkkl.mrmemorizer.data.entity.NoteType
+import me.ssttkkl.mrmemorizer.data.entity.convertToGraph
 import me.ssttkkl.mrmemorizer.ui.utils.SingleLiveEvent
 import me.ssttkkl.mrmemorizer.ui.utils.getNextReviewTimeText
 import java.time.LocalDate
@@ -18,6 +20,12 @@ class ViewNoteViewModel : ViewModel() {
     val noteId = MutableLiveData(0)
     val note = Transformations.switchMap(noteId) {
         AppDatabase.getInstance().noteDao.getNoteById(it)
+    }
+    val graph = Transformations.map(note) {
+        if (it.noteType == NoteType.Map)
+            it.tree.value.convertToGraph()
+        else
+            null
     }
     val category = Transformations.switchMap(note) {
         if (it.categoryId == 0)
